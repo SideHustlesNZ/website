@@ -1,0 +1,28 @@
+---
+/*
+  Material Symbols Outlined, as inline SVG.
+  The paths in icon-paths.json were extracted from the official Material
+  Symbols Outlined font, so the shapes are identical to the design - but the
+  site does not have to download a 3.8MB icon font to draw 24 icons.
+*/
+import paths from './icon-paths.json';
+
+interface Props {
+  name: keyof typeof paths;
+  size?: number | string;
+  color?: string;
+  class?: string;
+}
+
+const { name, size = 20, color, class: cls = '' } = Astro.props;
+const d = (paths as Record<string, string>)[name];
+if (!d) throw new Error(`Icon "${name}" is not in icon-paths.json`);
+const px = typeof size === 'number' ? `${size}px` : size;
+---
+
+<svg
+  class={`sh-icon ${cls}`}
+  viewBox="0 0 24 24"
+  style={`width:${px};height:${px}${color ? `;color:${color}` : ''}`}
+  aria-hidden="true"
+  focusable="false"><path d={d} /></svg>

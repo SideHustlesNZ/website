@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import { site, type NavKey } from '../content/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SubscribeModal from '../components/SubscribeModal.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  page: NavKey;
+  /* Home draws its own header inside the navy hero, so it opts out here. */
+  header?: boolean;
+  /* Subpages sit on the pale blue background. */
+  sub?: boolean;
+  /* The 404 page: keep it out of Google, and do not claim a canonical URL. */
+  noindex?: boolean;
+}
+
+const { title, description, page, header = true, sub = true, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-NZ">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#191970" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`}></script>
+    <script is:inline define:vars={{ gaId: site.gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </head>
+
+  <body>
+    <div class={`sh-page ${sub ? 'sh-page--sub' : ''}`}>
+      {header && <Header page={page} variant="light" />}
+      <slot />
+      <Footer />
+    </div>
+    <SubscribeModal />
+  </body>
+</html>

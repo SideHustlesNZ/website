@@ -1,0 +1,121 @@
+---
+/*
+  404 page.
+
+  Astro emits this to dist/404.html. Cloudflare serves it for any address that
+  does not match a real page, as long as wrangler.jsonc has
+  "not_found_handling": "404-page" inside the assets block.
+
+  All wording lives in src/content/notfound.ts.
+*/
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { notfound } from '../content/notfound';
+---
+
+<BaseLayout title={notfound.title} description={notfound.description} page="notfound" noindex>
+  <section class="nf-sec">
+    <div class="nf-card">
+      <span class="nf-mark" aria-hidden="true"></span>
+
+      <p class="sh-eyebrow nf-eyebrow">{notfound.eyebrow}</p>
+
+      <h1 class="sh-h2-56 nf-h1">
+        {notfound.heading[0]}<span class="nf-h1__em">{notfound.heading[1]}</span>
+      </h1>
+
+      <p class="nf-body">{notfound.body}</p>
+
+      <a class="sh-pill-navy nf-cta" href={notfound.cta.href}>{notfound.cta.label}</a>
+
+      <div class="nf-quick">
+        <span class="nf-quick__label">{notfound.quickLinksLabel}</span>
+        <div class="nf-quick__links">
+          {notfound.quickLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Fills the space between header and footer so the page never looks stranded. */
+  .nf-sec {
+    padding: var(--sp96) var(--px) var(--sp100);
+    display: flex;
+    justify-content: center;
+  }
+
+  .nf-card {
+    width: 100%;
+    max-width: 640px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--border-blue);
+    border-radius: 24px;
+    padding: 56px 44px 48px;
+  }
+
+  /* The logo mark, same shape as the header brand, scaled up. */
+  .nf-mark {
+    display: block;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 26px;
+    border-radius: 14px;
+    background: var(--lime);
+    border: 1px solid var(--navy);
+  }
+
+  .nf-eyebrow { margin: 0 0 14px; }
+
+  .nf-h1 { color: var(--ink); }
+  .nf-h1__em { color: var(--navy); font-style: italic; }
+
+  .nf-body {
+    margin: 22px auto 0;
+    max-width: 46ch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--grey-text);
+  }
+
+  .nf-cta {
+    margin-top: 32px;
+    padding: 15px 34px;
+    font-size: 15px;
+  }
+
+  .nf-quick { margin-top: 34px; }
+  .nf-quick__label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--grey-muted);
+  }
+  .nf-quick__links {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 26px;
+  }
+  .nf-quick__links a {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 1px solid transparent;
+  }
+  .nf-quick__links a:hover {
+    color: var(--navy-deep);
+    border-bottom-color: var(--navy-deep);
+  }
+
+  @media (max-width: 640px) {
+    .nf-card { padding: 42px 22px 38px; border-radius: 20px; }
+    .nf-mark { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 22px; }
+    .nf-cta { display: block; padding: 15px 20px; }
+    .nf-quick__links { gap: 10px 20px; }
+  }
+</style>

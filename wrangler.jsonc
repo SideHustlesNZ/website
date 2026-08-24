@@ -1,0 +1,16 @@
+{
+  // Cloudflare config for Side Hustles NZ.
+  // This is a static site: there is no Worker code, Cloudflare just serves
+  // the files Astro builds into ./dist. The _redirects file in public/ is
+  // copied into dist/ by the build and is honoured by Cloudflare.
+  "name": "shnz-site",
+  "compatibility_date": "2026-08-17",
+  "assets": {
+    "directory": "./dist",
+    // Any URL that is not a real page serves dist/404.html, which Astro builds
+    // from src/pages/404.astro. It keeps a real 404 status rather than
+    // pretending the page exists. Redirects in _redirects run before this, so
+    // /accelerator/ still goes to /pricing/ and never reaches the 404 page.
+    "not_found_handling": "404-page"
+  }
+}

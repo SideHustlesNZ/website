@@ -1,0 +1,29 @@
+---
+import { site, footerCols, routes } from '../content/site';
+---
+
+<footer class="sh-foot">
+  <div class="sh-foot__grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <span class="sh-foot__mark"></span>
+        <span class="sh-brand__word">{site.wordmark}</span>
+      </div>
+      <p class="sh-foot__blurb">{site.blurb}</p>
+    </div>
+
+    {footerCols.map((col) => (
+      <div>
+        <div class="sh-foot__title">{col.title}</div>
+        <div class="sh-foot__links">
+          {col.links.map((l) => <a href={l.href}>{l.label}</a>)}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="sh-foot__bottom">
+    <span>{site.copyright}</span>
+    <a href={routes.privacy}>Privacy Policy</a>
+  </div>
+</footer>

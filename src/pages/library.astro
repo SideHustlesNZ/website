@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { links } from '../content/site';
+import { hero, featured, filters, sessions, searchPlaceholder, emptyMessage, paywall } from '../content/library';
+---
+
+<BaseLayout
+  title="Inside the library — Side Hustles NZ"
+  description="Every masterclass and founder interview we have recorded, in one place. Members get the key: new sessions every fortnight and the whole archive with your membership."
+  page="library"
+>
+  <section class="lb-hero">
+    <div class="lb-badge">
+      <Icon name="lock" size={16} />
+      <span>{hero.badge}</span>
+    </div>
+
+    <h1 class="sh-h1-page lb-hero__h1">{hero.h1[0]}<span class="sh-accent">{hero.h1[1]}</span></h1>
+    <p class="lb-hero__lead">{hero.lead}</p>
+
+    <a class="lb-hero__cta" href={links.checkout} target="_blank" rel="noopener">
+      <span class="lb-hero__ctaLabel">{hero.cta}</span>
+      <span class="lb-hero__ctaGo" aria-hidden="true">→</span>
+    </a>
+
+    <div class="lb-stats">
+      {hero.stats.map((s) => (
+        <div class="lb-stat">
+          <span class="lb-stat__big">{s.big}</span>
+          <span class="lb-stat__small">{s.small}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Featured session -->
+  <section class="lb-featured-sec">
+    <div class="lb-featured">
+      <div class="lb-featured__ph" aria-hidden="true"><span>{featured.placeholder}</span></div>
+      <div class="lb-featured__scrim" aria-hidden="true"></div>
+
+      <div class="lb-featured__lock">
+        <Icon name="lock" size={15} />
+        <span>{featured.badge}</span>
+      </div>
+
+      <div class="lb-featured__body">
+        <div class="lb-featured__text">
+          <div class="lb-featured__kicker">{featured.kicker}</div>
+          <h2 class="lb-featured__title">{featured.title}</h2>
+          <p class="lb-featured__meta">{featured.meta}</p>
+        </div>
+        <a class="sh-pill-lime lb-featured__cta" href={links.checkout} target="_blank" rel="noopener">
+          <Icon name="lock" size={18} />
+          <span>{featured.cta}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Session grid -->
+  <section class="lb-grid-sec">
+    <div class="sh-wrap">
+      <div class="lb-controls">
+        <div class="lb-filters" role="group" aria-label="Filter sessions">
+          {filters.map((f, i) => (
+            <button type="button" class="lb-filter" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>{f}</button>
+          ))}
+        </div>
+
+        <label class="lb-search">
+          <Icon name="search" size={18} />
+          <span class="sh-sr">Search the library</span>
+          <input type="search" id="lb-search" placeholder={searchPlaceholder} autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="lb-grid" id="lb-grid">
+        {sessions.map((s) => (
+          <article class="lb-card" data-kind={s.kind} data-text={`${s.title} ${s.meta} ${s.kind}`.toLowerCase()}>
+            <div class="lb-card__still">
+              <span class="lb-card__stillLabel" aria-hidden="true">Session still</span>
+              <span class="lb-card__tint" aria-hidden="true"></span>
+              <span class="lb-card__members">
+                <Icon name="lock" size={13} />
+                <span>Members</span>
+              </span>
+              <span class="lb-card__length">
+                <Icon name="lock" size={16} />
+                <span>{s.length}</span>
+              </span>
+            </div>
+            <div class="lb-card__kind">{s.kind}</div>
+            <h3 class="lb-card__title">{s.title}</h3>
+            <div class="lb-card__meta">{s.meta}</div>
+          </article>
+        ))}
+      </div>
+
+      <p class="lb-empty" id="lb-empty" hidden>{emptyMessage}</p>
+
+      <!-- Paywall -->
+      <div class="lb-paywall on-navy">
+        <div class="lb-paywall__glow" aria-hidden="true"></div>
+        <div class="lb-paywall__inner">
+          <div class="sh-eyebrow sh-eyebrow--lime">{paywall.lockedCount} {paywall.eyebrowSuffix}</div>
+          <h2 class="sh-h2-44 lb-paywall__h2">{paywall.h2[0]}<span class="sh-accent-lime">{paywall.h2[1]}</span></h2>
+          <p class="lb-paywall__lead">{paywall.lead}</p>
+          <a class="sh-price-pill lb-paywall__cta" href={links.checkout} target="_blank" rel="noopener">
+            <span class="sh-price-pill__label">{paywall.pill}</span>
+            <span class="sh-price-pill__go lb-paywall__go" aria-hidden="true">→</span>
+          </a>
+          <p class="lb-paywall__fine">{paywall.fine}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const grid = document.getElementById('lb-grid');
+  const empty = document.getElementById('lb-empty');
+  const search = document.getElementById('lb-search') as HTMLInputElement | null;
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.lb-filter'));
+  let kind = 'All';
+
+  function apply() {
+    if (!grid) return;
+    const q = (search?.value ?? '').trim().toLowerCase();
+    let shown = 0;
+    grid.querySelectorAll<HTMLElement>('.lb-card').forEach((card) => {
+      const matchKind = kind === 'All' || card.dataset.kind === kind;
+      const matchText = !q || (card.dataset.text ?? '').includes(q);
+      const show = matchKind && matchText;
+      card.hidden = !show;
+      if (show) shown++;
+    });
+    if (empty) empty.hidden = shown !== 0;
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      kind = b.dataset.filter ?? 'All';
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      apply();
+    })
+  );
+  search?.addEventListener('input', apply);
+</script>
+
+<style>
+  .lb-hero { padding: var(--sp80) var(--px) 0; text-align: center; }
+  .lb-badge {
+    display: inline-flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--border-blue-2);
+    border-radius: 999px; padding: 7px 14px 7px 10px; color: var(--navy);
+    font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .lb-hero__h1 { margin-top: 26px; }
+  .lb-hero__lead { margin: 24px auto 0; max-width: 58ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+  .lb-hero__cta {
+    display: inline-flex; align-items: center; gap: 12px; margin-top: 32px; background: var(--navy);
+    padding: 8px 8px 8px 20px; border-radius: 999px; flex-wrap: wrap; justify-content: center;
+  }
+  .lb-hero__cta:hover { background: var(--navy-deep); }
+  .lb-hero__ctaLabel { color: #fff; font-size: 15px; font-weight: 700; }
+  .lb-hero__ctaGo {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--lime); color: var(--navy);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex: none;
+  }
+  .lb-stats { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+  .lb-stat { display: flex; align-items: baseline; gap: 8px; }
+  .lb-stat__big { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .lb-stat__small { font-size: 13px; color: var(--grey-light); }
+
+  /* featured */
+  .lb-featured-sec { padding: 56px var(--px) 0; }
+  .lb-featured {
+    max-width: 1000px; margin: 0 auto; position: relative; border-radius: 24px; overflow: hidden;
+    background: repeating-linear-gradient(135deg, #E9E9E2 0 12px, #DEDED6 12px 24px); aspect-ratio: 16/8;
+  }
+  @media (max-width: 700px) { .lb-featured { aspect-ratio: 4/5; } }
+  .lb-featured__ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .lb-featured__ph span {
+    font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--placeholder-label);
+  }
+  .lb-featured__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,50,0) 35%, rgba(10,10,50,.88)); }
+  .lb-featured__lock {
+    position: absolute; top: 22px; right: 22px; display: flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,.16); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.3);
+    border-radius: 999px; padding: 7px 13px 7px 10px; color: var(--lime);
+  }
+  .lb-featured__lock span { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+  .lb-featured__body {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 36px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+  }
+  @media (max-width: 640px) { .lb-featured__body { padding: 22px; } }
+  .lb-featured__text { max-width: 34ch; }
+  .lb-featured__kicker { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--lime); }
+  .lb-featured__title {
+    margin: 12px 0 0; font-size: clamp(24px, 4.6vw, 34px); line-height: 1.08; letter-spacing: -.03em;
+    font-weight: 800; color: #fff; text-wrap: balance;
+  }
+  .lb-featured__meta { margin: 10px 0 0; font-size: 14px; color: rgba(255,255,255,.75); }
+  .lb-featured__cta {
+    display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; font-size: 14px; flex: none;
+  }
+
+  /* grid */
+  .lb-grid-sec { padding: 52px var(--px) var(--sp100); }
+  .lb-controls { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .lb-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .lb-filter {
+    font-family: inherit; cursor: pointer; border-radius: 999px; padding: 10px 18px; font-size: 13px;
+    font-weight: 700; border: 1px solid var(--border-blue-2); background: #fff; color: var(--ink);
+  }
+  .lb-filter[aria-pressed='true'] { background: var(--navy); color: var(--lime); border-color: var(--navy); }
+  .lb-search {
+    display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--border-blue-2);
+    border-radius: 999px; padding: 11px 18px; min-width: 260px; color: var(--grey-muted); flex: 1 1 260px; max-width: 340px;
+  }
+  .lb-search input {
+    border: none; outline: none; background: none; font-family: inherit; font-size: 14px; color: var(--ink); width: 100%;
+  }
+  .lb-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; margin-top: 32px; }
+  @media (max-width: 1080px) { .lb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 820px) { .lb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .lb-grid { grid-template-columns: 1fr; } }
+  .lb-card[hidden] { display: none; }
+  .lb-card__still {
+    position: relative; aspect-ratio: 16/10; border-radius: 16px; overflow: hidden;
+    background: repeating-linear-gradient(135deg, #E9E9E2 0 9px, #DEDED6 9px 18px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lb-card__stillLabel {
+    font: 500 9px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--placeholder-label);
+  }
+  .lb-card__tint { position: absolute; inset: 0; background: rgba(25, 25, 112, .42); }
+  .lb-card__members {
+    position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,.9); border-radius: 999px; padding: 5px 9px 5px 7px; color: var(--navy);
+  }
+  .lb-card__members span { font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .lb-card__length {
+    position: absolute; left: 12px; bottom: 12px; display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.92); border-radius: 999px; padding: 7px 13px 7px 9px; color: var(--navy);
+  }
+  .lb-card__length span { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .lb-card__kind { margin-top: 14px; font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--navy); }
+  .lb-card__title { margin: 7px 0 0; font-size: 16px; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
+  .lb-card__meta { margin-top: 6px; font-size: 13px; color: var(--grey-light); }
+  .lb-empty { margin: 48px 0 0; text-align: center; font-size: 15px; color: var(--grey-light); }
+
+  /* paywall */
+  .lb-paywall {
+    margin-top: 48px; background: var(--navy); border-radius: 24px; padding: 48px 40px; text-align: center;
+    color: #fff; position: relative; overflow: hidden;
+  }
+  @media (max-width: 560px) { .lb-paywall { padding: 34px 22px; } }
+  .lb-paywall__glow {
+    position: absolute; inset: -50% 30% auto; height: 100%;
+    background: radial-gradient(circle, rgba(204,255,0,.18), transparent 65%);
+  }
+  .lb-paywall__inner { position: relative; }
+  .lb-paywall__h2 { margin-top: 20px; }
+  .lb-paywall__lead { margin: 20px auto 0; max-width: 52ch; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.78); }
+  .lb-paywall__cta { margin-top: 30px; }
+  .lb-paywall__cta .sh-price-pill__label { font-size: 15px; }
+  .lb-paywall__go { width: 36px; height: 36px; font-size: 16px; }
+  .lb-paywall__fine { margin: 16px 0 0; font-size: 12px; color: rgba(255,255,255,.6); }
+</style>

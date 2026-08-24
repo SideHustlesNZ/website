@@ -1,0 +1,21 @@
+# Old WordPress URLs that no longer exist in the new design.
+# Rachel does not need old search rankings kept, so this is only about not
+# showing people a 404 when they click an old link from Facebook.
+# The old membership page becomes the new Pricing page.
+/accelerator      /pricing/   301
+/accelerator/     /pricing/   301
+/accelerator/*    /pricing/   301
+# These two pages are not in the new design at all, so send people home.
+/freebies         /           301
+/freebies/        /           301
+/freebies/*       /           301
+/growth-fund      /           301
+/growth-fund/     /           301
+/growth-fund/*    /           301
+# Anything else unknown is handled by "not_found_handling" in wrangler.jsonc,
+# which is set to "404-page". Cloudflare serves dist/404.html (built from
+# src/pages/404.astro) and keeps a real 404 status. Rules above run first, so
+# /accelerator/ still redirects and never reaches the 404 page.
+#
+# Do NOT add a "/*" catch-all in this file. It matches the home page itself and
+# causes an infinite redirect loop. That is what broke the first deploy.

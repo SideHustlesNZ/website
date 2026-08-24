@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { links } from '../content/site';
+import { founder, intro, gallery } from '../content/about';
+---
+
+<BaseLayout
+  title="About us — Side Hustles NZ"
+  description="Side Hustles NZ started with a simple observation: thousands of Kiwis are building something after hours, almost all of them alone. Here is what we built instead."
+  page="about"
+>
+  <section class="ab-intro-sec">
+    <div class="ab-grid">
+      <div class="ab-portrait">
+        <div class="ab-portrait__frame">
+          <Placeholder label={founder.portrait} height="520px" radius="22px" />
+          <div class="ab-portrait__caption">
+            <div class="ab-portrait__name">{founder.name}</div>
+            <div class="ab-portrait__role">{founder.role}</div>
+          </div>
+        </div>
+
+        <div class="ab-social">
+          <a href={links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM2.9 21.5h4.15V9.75H2.9V21.5zM9.6 9.75h3.98v1.6h.06c.55-1.04 1.9-2.14 3.92-2.14 4.19 0 4.96 2.76 4.96 6.34v5.95H18.4v-5.28c0-1.26-.02-2.88-1.75-2.88-1.76 0-2.02 1.37-2.02 2.79v5.37H9.6V9.75z"></path></svg>
+          </a>
+          <a href={links.facebook} target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.02H7.9v-2.92h2.54v-2.2c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.92h-2.33V22C18.34 21.24 22 17.08 22 12.06z"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h1 class="sh-h1-page sh-h1-page--64">{intro.h1[0]}<span class="ab-h1__us">{intro.h1[1]}</span></h1>
+        <p class="ab-pull">{intro.pullQuote}</p>
+        <div class="ab-body">
+          {intro.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab-gallery-sec">
+    <div class="ab-gallery">
+      {gallery.map((label) => <Placeholder label={label} height="300px" radius="20px" />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ab-intro-sec { padding: var(--sp84) var(--px) 0; }
+  .ab-grid {
+    max-width: 1180px; margin: 0 auto; display: grid;
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 64px; align-items: start;
+  }
+  @media (max-width: 900px) { .ab-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+  .ab-portrait__frame { position: relative; }
+  .ab-portrait__caption { position: absolute; left: 0; right: 0; bottom: 34px; padding: 0 26px; pointer-events: none; }
+  .ab-portrait__name {
+    font-size: clamp(26px, 5vw, 34px); line-height: 1; font-weight: 800; font-style: italic; letter-spacing: -.02em;
+    text-transform: uppercase; color: var(--navy); text-shadow: 0 1px 14px rgba(255, 255, 255, .65);
+  }
+  .ab-portrait__role {
+    margin-top: 8px; font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--navy); text-shadow: 0 1px 14px rgba(255, 255, 255, .65);
+  }
+  .ab-social { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding-left: 26px; }
+  .ab-social a { display: flex; color: var(--navy); }
+  .ab-social a:hover { color: var(--navy-deep); }
+
+  .ab-h1__us { color: var(--navy); font-style: italic; }
+  .ab-pull {
+    margin: 34px 0 0; font-size: clamp(19px, 2.4vw, 22px); line-height: 1.4; font-weight: 700;
+    letter-spacing: -.015em; max-width: 62ch;
+  }
+  .ab-body { display: flex; flex-direction: column; gap: 22px; margin-top: 32px; max-width: 62ch; }
+  .ab-body p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--grey-text); }
+
+  .ab-gallery-sec { padding: var(--sp88) var(--px) var(--sp100); }
+  .ab-gallery {
+    max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px;
+  }
+  @media (max-width: 900px) { .ab-gallery { grid-template-columns: 1fr; gap: 18px; } }
+</style>

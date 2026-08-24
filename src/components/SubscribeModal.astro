@@ -1,0 +1,122 @@
+---
+import { subscribe } from '../content/site';
+
+/*
+  Subscribe modal — opened by the bell button in the header, on every page.
+
+  IMPORTANT, STILL TO DO: this form has no destination yet. A static site
+  cannot store signups itself, so the email address has to be posted to
+  Rachel's own email tool (Mailchimp, Kit, MailerLite ...). Until we know
+  which tool that is, `action` is empty and submitting only shows the
+  confirmation state, exactly as her design does. Nothing is stored and no
+  email is sent, so it must be wired up before the site goes live.
+
+  To wire it up: set ACTION below to the provider's form endpoint and delete
+  the `if (!form.action)` branch in the script.
+*/
+const ACTION = ''; // <- paste Rachel's email tool form endpoint here
+---
+
+<div class="sh-modal" id="sh-subscribe" data-open="false">
+  <div class="sh-modal__overlay" data-subscribe-overlay style="position:absolute;inset:0"></div>
+  <div class="sh-modal__panel" role="dialog" aria-modal="true" aria-labelledby="sh-sub-title">
+    <button type="button" class="sh-modal__close" data-subscribe-close aria-label="Close">&#10005;</button>
+    <h2 class="sh-modal__title" id="sh-sub-title">{subscribe.title}</h2>
+    <p class="sh-modal__body">{subscribe.body}</p>
+
+    <form class="sh-modal__form" id="sh-sub-form" action={ACTION} method="post" novalidate>
+      <label class="sh-modal__label" for="sh-sub-email">{subscribe.label}</label>
+      <input
+        class="sh-modal__input"
+        id="sh-sub-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder={subscribe.placeholder}
+      />
+      <p class="sh-modal__error" id="sh-sub-error" hidden>{subscribe.error}</p>
+      <button class="sh-modal__submit" type="submit">{subscribe.button}</button>
+    </form>
+
+    <div class="sh-modal__done" id="sh-sub-done" hidden>
+      <p>{subscribe.done}</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('sh-subscribe');
+  const panel = modal?.querySelector<HTMLElement>('.sh-modal__panel');
+  const form = document.getElementById('sh-sub-form') as HTMLFormElement | null;
+  const done = document.getElementById('sh-sub-done');
+  const error = document.getElementById('sh-sub-error');
+  const input = document.getElementById('sh-sub-email') as HTMLInputElement | null;
+  let lastFocused: HTMLElement | null = null;
+
+  function open() {
+    if (!modal) return;
+    lastFocused = document.activeElement as HTMLElement;
+    modal.dataset.open = 'true';
+    document.body.dataset.locked = 'true';
+    form?.removeAttribute('hidden');
+    done?.setAttribute('hidden', '');
+    error?.setAttribute('hidden', '');
+    form?.reset();
+    setTimeout(() => input?.focus(), 20);
+  }
+
+  function close() {
+    if (!modal) return;
+    modal.dataset.open = 'false';
+    document.body.dataset.locked = 'false';
+    lastFocused?.focus();
+  }
+
+  document.querySelectorAll('[data-subscribe-open]').forEach((b) =>
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      open();
+    })
+  );
+  document.querySelectorAll('[data-subscribe-close], [data-subscribe-overlay]').forEach((b) =>
+    b.addEventListener('click', close)
+  );
+
+  document.addEventListener('keydown', (e) => {
+    if (modal?.dataset.open !== 'true') return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'Tab' && panel) {
+      // keep tabbing inside the dialog
+      const f = panel.querySelectorAll<HTMLElement>('button, input, a[href]');
+      if (!f.length) return;
+      const first = f[0];
+      const last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  form?.addEventListener('submit', (e) => {
+    const value = input?.value.trim() ?? '';
+    const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    if (!looksLikeEmail) {
+      e.preventDefault();
+      error?.removeAttribute('hidden');
+      input?.focus();
+      return;
+    }
+    error?.setAttribute('hidden', '');
+    // No destination wired up yet: show the confirmation without posting.
+    if (!form.getAttribute('action')) {
+      e.preventDefault();
+      form.setAttribute('hidden', '');
+      done?.removeAttribute('hidden');
+    }
+  });
+</script>

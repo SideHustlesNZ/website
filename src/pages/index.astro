@@ -1,0 +1,657 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
+import Placeholder from '../components/Placeholder.astro';
+import Faq from '../components/Faq.astro';
+import { links, routes } from '../content/site';
+import {
+  hero,
+  problem,
+  transformation,
+  included,
+  how,
+  scale,
+  showAnnual,
+  pricing,
+  coaches,
+  quotesSection,
+  triptych,
+  story,
+  faqSection,
+  podcast,
+  finalCta,
+} from '../content/home';
+
+/* the doubled list that makes the marquee loop seamlessly */
+const quotesLoop = [...quotesSection.quotes, ...quotesSection.quotes];
+
+/* scattered "Member" circles behind the community-scale section */
+const scatter = [
+  { pos: 'top:12%;left:4%', size: 88 },
+  { pos: 'top:48%;left:11%', size: 64, inner: true },
+  { pos: 'bottom:9%;left:6%', size: 76 },
+  { pos: 'top:6%;left:22%', size: 56, inner: true },
+  { pos: 'bottom:4%;left:32%', size: 62, inner: true },
+  { pos: 'bottom:6%;right:33%', size: 44, inner: true },
+  { pos: 'bottom:22%;left:18%', size: 50, inner: true },
+  { pos: 'top:10%;right:5%', size: 80 },
+  { pos: 'top:42%;right:12%', size: 54, inner: true },
+  { pos: 'bottom:12%;right:4%', size: 68 },
+  { pos: 'top:4%;right:24%', size: 48, inner: true },
+];
+---
+
+<BaseLayout
+  title="Side Hustles NZ — Stop planning your side hustle. Start running it."
+  description="A paid membership community for New Zealanders building income on the side. Framework, weekly live coaching, NZ templates, masterclasses and members-only events."
+  page="home"
+  header={false}
+  sub={false}
+>
+  <!-- 1. Hero ------------------------------------------------------------- -->
+  <section class="hm-hero">
+    <div class="hm-hero__texture" aria-hidden="true"></div>
+    <div class="hm-hero__scrim" aria-hidden="true"></div>
+    <div class="hm-hero__videonote" aria-hidden="true">{hero.videoNote}</div>
+
+    <div class="hm-hero__inner">
+      <Header page="home" variant="navy" />
+
+      <div class="hm-hero__copy">
+        <div class="hm-hero__eyebrow">
+          <span class="hm-rule" aria-hidden="true"></span>
+          <span>{hero.eyebrow}</span>
+          <span class="hm-rule" aria-hidden="true"></span>
+        </div>
+
+        <h1 class="sh-h1-hero hm-hero__h1">
+          {hero.h1[0]}<br />{hero.h1[1]}<br /><span class="sh-accent-lime">{hero.h1[2]}</span>
+        </h1>
+
+        <p class="hm-hero__lead">{hero.lead}</p>
+
+        <a class="sh-price-pill hm-hero__cta" href={links.checkout} target="_blank" rel="noopener">
+          <span class="sh-price-pill__mark" aria-hidden="true"></span>
+          <span class="sh-price-pill__label">{hero.ctaLabel}</span>
+          <span class="sh-price-pill__div" aria-hidden="true"></span>
+          <span class="sh-price-pill__price">{hero.price}</span>
+          <span class="sh-price-pill__go" aria-hidden="true">→</span>
+        </a>
+
+        <p class="hm-hero__fine">{hero.finePrint}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Problem ---------------------------------------------------------- -->
+  <section id="problem" class="hm-problem">
+    <div class="sh-wrap">
+      <div class="sh-center">
+        <h2 class="sh-h2-56">{problem.h2[0]}<br /><span class="sh-accent">{problem.h2[1]}</span></h2>
+        <p class="hm-problem__lead">{problem.lead}</p>
+      </div>
+
+      <div class="hm-problem__grid">
+        {problem.cards.map((c) => (
+          <div class="hm-pcard">
+            <div class="hm-pcard__icon"><Icon name={c.icon as any} size={20} /></div>
+            <div class="hm-pcard__title">{c.title}</div>
+            <p class="hm-pcard__body">{c.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <p class="hm-problem__closer">{problem.closer}</p>
+    </div>
+  </section>
+
+  <!-- 3. Transformation --------------------------------------------------- -->
+  <section id="transformation" class="hm-transform on-navy">
+    <div class="sh-wrap--1100 sh-center">
+      <h2 class="sh-h2-60">
+        {transformation.h2[0]}<br /><span class="sh-accent-lime">{transformation.h2[1]}</span>
+      </h2>
+      <div class="hm-transform__grid">
+        {transformation.cards.map((t) => (
+          <div class="hm-tcard">
+            <span class="hm-tcard__tick" aria-hidden="true">✓</span>
+            <div>
+              <div class="hm-tcard__title">{t.title}</div>
+              <p class="hm-tcard__body">{t.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Everything included ---------------------------------------------- -->
+  <section id="included" class="hm-included">
+    <div class="sh-wrap">
+      <div class="sh-center">
+        <h2 class="sh-h2-56">{included.h2[0]}<br /><span class="sh-accent">{included.h2[1]}</span></h2>
+        <p class="hm-included__lead">{included.lead}</p>
+      </div>
+
+      <div class="hm-included__grid">
+        {included.cards.map((c) => (
+          <div class="hm-icard">
+            <div class="hm-icard__head">
+              <div class="hm-icard__tile"><Icon name={c.icon as any} size={21} /></div>
+              <div class="hm-icard__kicker">{c.kicker}</div>
+            </div>
+            <div class="hm-icard__title">{c.title}</div>
+            <p class="hm-icard__body">{c.body}</p>
+            <div class="hm-icard__points">
+              {c.points.map((p) => (
+                <div class="hm-point"><span class="hm-point__dot" aria-hidden="true"></span>{p}</div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div class="hm-icard hm-icard--navy">
+          <div class="hm-icard__head">
+            <div class="hm-icard__tile hm-icard__tile--lime">
+              <Icon name={included.navyCard.icon as any} size={21} />
+            </div>
+            <div class="hm-icard__kicker hm-icard__kicker--lime">{included.navyCard.kicker}</div>
+          </div>
+          <div class="hm-icard__title">{included.navyCard.title}</div>
+          <p class="hm-icard__body hm-icard__body--on-navy">{included.navyCard.body}</p>
+          <a class="hm-icard__cta" href={links.checkout} target="_blank" rel="noopener">
+            <span class="sh-pill-lime hm-icard__ctaPill">{included.navyCard.cta}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. How it works ----------------------------------------------------- -->
+  <section id="how" class="hm-how on-navy">
+    <div class="sh-wrap">
+      <div class="hm-how__head">
+        <div>
+          <div class="sh-eyebrow sh-eyebrow--lime">{how.eyebrow}</div>
+          <h2 class="sh-h2-56 hm-how__h2">{how.h2[0]}<span class="sh-accent-lime">{how.h2[1]}</span></h2>
+        </div>
+        <p class="hm-how__lead">{how.lead}</p>
+      </div>
+
+      <div class="hm-how__grid">
+        {how.steps.map((s) => (
+          <div class="hm-step">
+            <div class="hm-step__num">{s.num}</div>
+            <h3 class="hm-step__title">{s.title}</h3>
+            <p class="hm-step__body">{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Community scale -------------------------------------------------- -->
+  <section id="stories" class="hm-scale">
+    <h2 class="sh-h2-56">{scale.h2[0]}<br /><span class="sh-accent">{scale.h2[1]}</span></h2>
+    <p class="hm-scale__lead">{scale.lead}</p>
+
+    <div class="hm-scatter" aria-hidden="true">
+      {scatter.map((s) => (
+        <div class="hm-scatter__item" data-inner={s.inner ? '1' : undefined} style={`${s.pos};width:${s.size}px;height:${s.size}px`}>
+          <span>Member</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 7. Pricing ---------------------------------------------------------- -->
+  <section id="pricing" class="hm-pricing">
+    <h2 class="sh-h2-60">{pricing.h2[0]}<span class="sh-accent">{pricing.h2[1]}</span></h2>
+    <p class="hm-pricing__lead">{pricing.lead}</p>
+
+    <div class="hm-pricing__card">
+      <div class="hm-plans">
+        <div class="hm-plan hm-plan--monthly">
+          <div class="hm-plan__row">
+            <span class="hm-plan__label">{pricing.monthly.label}</span>
+            <span class="hm-plan__badge">{pricing.monthly.badge}</span>
+          </div>
+          <div class="hm-plan__price">
+            <span class="hm-plan__amount">{pricing.monthly.price}</span>
+            <span class="hm-plan__per">{pricing.monthly.per}</span>
+          </div>
+          <p class="hm-plan__fine">{pricing.monthly.fine}</p>
+          <a class="sh-pill-lime hm-plan__cta" href={links.checkout} target="_blank" rel="noopener">
+            {pricing.monthly.cta}
+          </a>
+        </div>
+
+        {showAnnual && (
+          <div class="hm-plan hm-plan--annual">
+            <div class="hm-plan__row">
+              <span class="hm-plan__label hm-plan__label--grey">{pricing.annual.label}</span>
+              <span class="hm-plan__save">{pricing.annual.save}</span>
+            </div>
+            <div class="hm-plan__price">
+              <span class="hm-plan__amount hm-plan__amount--dark">{pricing.annual.price}</span>
+              <span class="hm-plan__per hm-plan__per--grey">{pricing.annual.per}</span>
+            </div>
+            <p class="hm-plan__fine hm-plan__fine--grey">{pricing.annual.fine}</p>
+            <a class="sh-pill-outline hm-plan__cta hm-plan__cta--outline" href={links.checkout} target="_blank" rel="noopener">
+              {pricing.annual.cta}
+            </a>
+          </div>
+        )}
+      </div>
+
+      <div class="hm-included-list">
+        <div class="hm-included-list__title">{pricing.includedTitle}</div>
+        <div class="hm-included-list__rows">
+          {pricing.included.map((i) => (
+            <div class="hm-inc">
+              <div class="hm-inc__chip"><Icon name={i.icon as any} size={17} /></div>
+              <div>
+                <div class="hm-inc__title">{i.title}</div>
+                <div class="hm-inc__body">{i.body}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Coaches ---------------------------------------------------------- -->
+  <section id="coaches" class="hm-coaches">
+    <div class="sh-wrap">
+      <div class="sh-eyebrow">{coaches.eyebrow}</div>
+      <h2 class="sh-h2-56 hm-coaches__h2">{coaches.h2[0]}<span class="sh-accent">{coaches.h2[1]}</span></h2>
+      <div class="hm-coaches__grid">
+        {coaches.people.map((c) => (
+          <div>
+            <Placeholder label="Portrait" ratio="3/4" radius="14px" stripe="fine" />
+            <div class="hm-coach__name">{c.name}</div>
+            <div class="hm-coach__biz">{c.biz}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Quotes marquee --------------------------------------------------- -->
+  <section id="quotes" class="hm-quotes">
+    <div class="hm-quotes__head">
+      <div class="sh-eyebrow">{quotesSection.eyebrow}</div>
+      <h2 class="sh-h2-56 hm-quotes__h2">
+        {quotesSection.h2[0]}<span class="sh-accent">{quotesSection.h2[1]}</span>
+      </h2>
+    </div>
+    <div class="sh-marquee">
+      {quotesLoop.map((q) => (
+        <div class="hm-quote">
+          <p class="hm-quote__text">&ldquo;{q.quote}&rdquo;</p>
+          <div class="hm-quote__who">
+            <div class="hm-quote__initials" aria-hidden="true">{q.initials}</div>
+            <div>{q.who}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 10. Triptych -------------------------------------------------------- -->
+  <section class="hm-triptych">
+    {triptych.map((t) => <Placeholder label={t} ratio="3/4" />)}
+  </section>
+
+  <!-- 11. Our story ------------------------------------------------------- -->
+  <section id="about" class="hm-story">
+    <div class="hm-story__grid">
+      <Placeholder label={story.founders.length ? 'Founder portrait' : 'Founder portrait'} ratio="4/5" radius="20px" />
+      <div>
+        <div class="sh-eyebrow">{story.eyebrow}</div>
+        <h2 class="sh-h2-48 hm-story__h2">
+          {story.h2[0]}<br /><span class="sh-accent">{story.h2[1]}</span>
+        </h2>
+        <div class="hm-story__paras">
+          {story.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+        <div class="hm-story__founders">
+          {story.founders.map((f) => (
+            <div class="hm-founder">
+              <Placeholder label="" circle size="44px" stripe="7" border="1px solid #191970" class="hm-founder__avatar" />
+              <div>
+                <div class="hm-founder__name">{f.name}</div>
+                <div class="hm-founder__role">{f.role}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. FAQs ------------------------------------------------------------ -->
+  <section class="hm-faqs">
+    <div class="sh-eyebrow">{faqSection.eyebrow}</div>
+    <h2 class="sh-h2-56 hm-faqs__h2">{faqSection.h2}</h2>
+    <div class="sh-wrap--820 hm-faqs__body">
+      <Faq faqs={faqSection.faqs} variant="plain" id="home-faq" />
+    </div>
+  </section>
+
+  <!-- 13. Podcast / library ---------------------------------------------- -->
+  <section id="library" class="hm-podcast">
+    <h2 class="sh-h2-56">{podcast.h2[0]}<br /><span class="sh-accent">{podcast.h2[1]}</span></h2>
+    <p class="hm-podcast__lead">{podcast.lead}</p>
+
+    <div class="hm-guests">
+      {podcast.guests.map((g) => (
+        <div class="hm-guest">
+          <Placeholder label="Guest" circle size="150px" stripe="9" border="2px solid #191970" labelSize="9px" />
+          <div class="hm-guest__name">{g.name}</div>
+          <div class="hm-guest__biz">{g.biz}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="hm-podstats">
+      <div class="hm-podstats__grid">
+        {podcast.stats.map((s) => (
+          <div>
+            <div class="hm-podstats__big">{s.big}</div>
+            <div class="hm-podstats__small">{s.small}</div>
+          </div>
+        ))}
+      </div>
+      {podcast.listenHref ? (
+        <a class="sh-pill-navy hm-podstats__cta" href={podcast.listenHref} target="_blank" rel="noopener">
+          {podcast.listenCta}
+        </a>
+      ) : (
+        <a class="sh-pill-navy hm-podstats__cta" href={routes.contact}>{podcast.listenCta}</a>
+      )}
+    </div>
+
+    <div class="hm-press">
+      {podcast.pressLogos.map((l) => <span>{l}</span>)}
+    </div>
+  </section>
+
+  <!-- 14. Final CTA ------------------------------------------------------- -->
+  <section class="hm-final on-navy">
+    <div class="hm-final__glow" aria-hidden="true"></div>
+    <div class="hm-final__inner">
+      <div class="sh-eyebrow sh-eyebrow--lime">{finalCta.eyebrow}</div>
+      <h2 class="sh-h2-68 hm-final__h2">
+        {finalCta.h2[0]}<br />{finalCta.h2[1]}<span class="sh-accent-lime">{finalCta.h2[2]}</span>
+      </h2>
+      <p class="hm-final__lead">{finalCta.lead}</p>
+
+      <a class="sh-price-pill hm-final__cta" href={links.checkout} target="_blank" rel="noopener">
+        <span class="sh-price-pill__mark" aria-hidden="true"></span>
+        <span class="sh-price-pill__label">{finalCta.pill}</span>
+        <span class="sh-price-pill__go" aria-hidden="true">→</span>
+      </a>
+
+      <p class="hm-final__fine">{finalCta.fine}</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---- 1. Hero ---- */
+  .hm-hero { position: relative; background: var(--navy); padding: 0 0 80px; overflow: hidden; }
+  .hm-hero__texture {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 12px, rgba(255,255,255,.02) 12px 24px);
+  }
+  .hm-hero__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,50,.55), rgba(10,10,50,.85)); }
+  /* Marks where Rachel's hero video goes. Sits 44px up rather than the
+     design's 20px, because the next section overlaps the hero by 32px and
+     would slice the label in half. Delete this element once the video is in. */
+  .hm-hero__videonote {
+    position: absolute; left: 24px; bottom: 44px; border: 1px solid rgba(255,255,255,.22);
+    border-radius: 999px; padding: 7px 14px; font: 500 10px/1 var(--mono);
+    letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.55);
+  }
+  .hm-hero__inner { position: relative; }
+  .hm-hero__copy { text-align: center; padding: var(--hero-top) var(--px) 0; max-width: 1180px; margin: 0 auto; }
+  .hm-hero__eyebrow {
+    display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 26px;
+    font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--lime); font-weight: 700;
+  }
+  .hm-rule { width: 26px; height: 1px; background: rgba(204,255,0,.6); flex: none; }
+  .hm-hero__h1 { color: #fff; }
+  .hm-hero__lead { margin: 32px auto 0; max-width: 60ch; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,.8); }
+  .hm-hero__cta { margin-top: 36px; }
+  .hm-hero__fine { margin: 16px 0 0; font-size: 12px; color: rgba(255,255,255,.6); }
+  @media (max-width: 640px) {
+    .hm-hero { padding-bottom: 72px; }
+    .hm-hero__videonote { left: var(--px); font-size: 9px; padding: 6px 11px; }
+  }
+
+  /* ---- 2. Problem ---- */
+  .hm-problem {
+    background: var(--tint-blue); border-radius: 32px 32px 0 0; margin-top: -32px;
+    position: relative; padding: var(--sp96) var(--px) var(--sp100);
+  }
+  .hm-problem__lead { margin: 24px auto 0; max-width: 58ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+  .hm-problem__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 52px; }
+  @media (max-width: 1080px) { .hm-problem__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 860px) { .hm-problem__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .hm-problem__grid { grid-template-columns: 1fr; } }
+  .hm-pcard { background: #fff; border: 1px solid var(--border-blue-2); border-radius: 18px; padding: 26px 24px; }
+  .hm-pcard__icon {
+    width: 38px; height: 38px; border-radius: 11px; background: var(--navy); color: var(--lime);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hm-pcard__title { margin-top: 16px; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .hm-pcard__body { margin: 8px 0 0; font-size: 14px; line-height: 1.6; color: var(--grey-text); }
+  .hm-problem__closer {
+    margin: 44px auto 0; max-width: 44ch; text-align: center; font-size: 22px; font-weight: 700;
+    letter-spacing: -.02em; line-height: 1.35; text-wrap: balance;
+  }
+
+  /* ---- 3. Transformation ---- */
+  .hm-transform { background: var(--navy); color: #fff; padding: var(--sp100) var(--px); }
+  .hm-transform__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 52px; text-align: left; }
+  @media (max-width: 760px) { .hm-transform__grid { grid-template-columns: 1fr; } }
+  .hm-tcard {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 16px;
+    padding: 24px 26px; display: flex; gap: 16px; align-items: flex-start;
+  }
+  .hm-tcard__tick {
+    flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--lime); color: var(--navy);
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;
+  }
+  .hm-tcard__title { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .hm-tcard__body { margin: 6px 0 0; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.72); }
+
+  /* ---- 4. Everything included ---- */
+  .hm-included { background: #fff; padding: var(--sp100) var(--px); }
+  .hm-included__lead { margin: 22px auto 0; max-width: 52ch; font-size: 16px; line-height: 1.6; color: var(--grey-text); }
+  .hm-included__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 52px; }
+  @media (max-width: 1080px) { .hm-included__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .hm-included__grid { grid-template-columns: 1fr; } }
+  .hm-icard {
+    background: var(--card-blue); border: 1px solid var(--border-blue); border-radius: 20px; padding: 30px 28px;
+    display: flex; flex-direction: column;
+  }
+  .hm-icard:hover { border-color: var(--navy); }
+  .hm-icard--navy { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .hm-icard--navy:hover { border-color: var(--navy); }
+  .hm-icard__head { display: flex; align-items: center; gap: 12px; }
+  .hm-icard__tile {
+    width: 40px; height: 40px; border-radius: 12px; background: var(--navy); color: var(--lime);
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .hm-icard__tile--lime { background: var(--lime); color: var(--navy); }
+  .hm-icard__kicker { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--navy); }
+  .hm-icard__kicker--lime { color: var(--lime); }
+  .hm-icard__title { margin-top: 18px; font-size: 21px; font-weight: 700; letter-spacing: -.02em; }
+  .hm-icard__body { margin: 10px 0 0; font-size: 14px; line-height: 1.65; color: var(--grey-text); }
+  .hm-icard__body--on-navy { color: rgba(255,255,255,.75); }
+  .hm-icard__points { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .hm-point { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; color: var(--ink); }
+  .hm-point__dot {
+    flex: none; margin-top: 6px; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--lime); box-shadow: 0 0 0 1px var(--navy);
+  }
+  .hm-icard__cta { display: block; margin-top: auto; padding-top: 22px; }
+  .hm-icard__ctaPill { display: block; width: 100%; font-size: 15px; padding: 14px; }
+
+  /* ---- 5. How it works ---- */
+  .hm-how { background: var(--navy); color: #fff; padding: var(--sp110) var(--px); }
+  .hm-how__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .hm-how__h2 { margin-top: 18px; max-width: 14ch; }
+  .hm-how__lead { margin: 0; max-width: 42ch; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.72); }
+  .hm-how__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+  @media (max-width: 860px) { .hm-how__grid { grid-template-columns: 1fr; gap: 32px; } }
+  .hm-step { border-top: 1px solid rgba(204,255,0,.4); padding-top: 24px; }
+  .hm-step__num { font-size: 14px; font-weight: 800; color: var(--lime); letter-spacing: .08em; }
+  .hm-step__title { margin: 16px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -.025em; }
+  .hm-step__body { margin: 12px 0 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.7); }
+
+  /* ---- 6. Community scale ---- */
+  .hm-scale { position: relative; overflow: hidden; background: var(--warm); padding: var(--sp120) var(--px); text-align: center; }
+  .hm-scale__lead { margin: 24px auto 0; max-width: 58ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); position: relative; }
+  .hm-scale h2 { position: relative; }
+  .hm-scatter { position: absolute; inset: 0; pointer-events: none; }
+  .hm-scatter__item {
+    position: absolute; border-radius: 50%;
+    background: repeating-linear-gradient(135deg, #E9E9E2 0 7px, #DEDED6 7px 14px);
+    border: 2px solid #fff; box-shadow: 0 0 0 1px #E3E3DC;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hm-scatter__item span {
+    font: 500 8px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--placeholder-label);
+  }
+  @media (max-width: 860px) { .hm-scatter__item[data-inner] { display: none; } }
+  @media (max-width: 640px) { .hm-scatter { display: none; } }
+
+  /* ---- 7. Pricing ---- */
+  .hm-pricing { background: #fff; padding: var(--sp96) var(--px); text-align: center; }
+  .hm-pricing__lead { margin: 18px 0 0; font-size: 16px; color: var(--grey-text); }
+  .hm-pricing__card {
+    max-width: 1080px; margin: 46px auto 0; background: var(--card-blue); border: 1px solid var(--border-blue);
+    border-radius: 24px; padding: 32px; display: grid; grid-template-columns: 1fr 1.15fr; gap: 32px; text-align: left;
+  }
+  @media (max-width: 900px) { .hm-pricing__card { grid-template-columns: 1fr; gap: 28px; padding: 22px; } }
+  .hm-plans { display: flex; flex-direction: column; gap: 16px; }
+  .hm-plan { border-radius: 20px; padding: 28px; }
+  .hm-plan--monthly { background: var(--navy); color: #fff; }
+  .hm-plan--annual { background: #fff; border: 1px solid var(--border-blue-2); padding: 26px 28px; }
+  .hm-plan__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .hm-plan__label { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.65); }
+  .hm-plan__label--grey { color: var(--grey-light); }
+  .hm-plan__badge {
+    background: var(--lime); color: var(--navy); font-size: 10px; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; padding: 5px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .hm-plan__save { font-size: 11px; font-weight: 700; color: var(--navy); }
+  .hm-plan__price { display: flex; align-items: baseline; gap: 6px; margin-top: 20px; flex-wrap: wrap; }
+  .hm-plan--annual .hm-plan__price { margin-top: 16px; }
+  .hm-plan__amount { font-size: 64px; font-weight: 800; letter-spacing: -.045em; line-height: 1; color: var(--lime); }
+  .hm-plan__amount--dark { font-size: 48px; color: var(--ink); }
+  .hm-plan__per { font-size: 17px; font-weight: 600; }
+  .hm-plan__per--grey { font-size: 15px; color: var(--grey-text); }
+  .hm-plan__fine { margin: 8px 0 0; font-size: 12px; color: rgba(255,255,255,.65); }
+  .hm-plan__fine--grey { color: var(--grey-light); }
+  .hm-plan__cta { display: block; margin-top: 22px; font-size: 15px; padding: 15px; }
+  .hm-plan__cta--outline { margin-top: 18px; font-size: 14px; padding: 13px; }
+  .hm-included-list { padding: 8px 8px 0; }
+  .hm-included-list__title { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: var(--grey-light); }
+  .hm-included-list__rows { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 20px; }
+  .hm-inc { display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start; }
+  .hm-inc__chip {
+    width: 30px; height: 30px; border-radius: 9px; background: var(--tint-blue); border: 1px solid var(--border-blue-2);
+    color: var(--navy); display: flex; align-items: center; justify-content: center;
+  }
+  .hm-inc__title { font-size: 15px; font-weight: 700; }
+  .hm-inc__body { margin-top: 4px; font-size: 13px; line-height: 1.55; color: var(--grey-text); }
+
+  /* ---- 8. Coaches ---- */
+  .hm-coaches { background: var(--warm); padding: var(--sp100) var(--px); }
+  .hm-coaches__h2 { margin-top: 18px; max-width: 20ch; }
+  .hm-coaches__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 48px; }
+  @media (max-width: 900px) { .hm-coaches__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .hm-coaches__grid { grid-template-columns: 1fr; } }
+  .hm-coach__name { margin-top: 12px; font-size: 15px; font-weight: 700; }
+  .hm-coach__biz { font-size: 13px; color: var(--grey-light); }
+
+  /* ---- 9. Quotes ---- */
+  .hm-quotes { padding: var(--sp96) 0 var(--sp110); background: var(--warm); overflow: hidden; }
+  .hm-quotes__head { max-width: 1180px; margin: 0 auto 40px; padding: 0 var(--px); }
+  .hm-quotes__h2 { margin-top: 18px; }
+  .hm-quote {
+    width: 340px; background: #fff; border: 1px solid var(--border-warm); border-radius: 16px;
+    padding: 26px 24px; display: flex; flex-direction: column; gap: 16px; flex: none;
+  }
+  .hm-quote__text { margin: 0; font-size: 17px; line-height: 1.5; letter-spacing: -.01em; font-weight: 500; }
+  .hm-quote__who { display: flex; align-items: center; gap: 10px; margin-top: auto; font-size: 13px; color: var(--grey-text); }
+  .hm-quote__initials {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: var(--lime);
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none;
+  }
+
+  /* ---- 10. Triptych ---- */
+  .hm-triptych { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px; }
+  @media (max-width: 640px) { .hm-triptych { grid-template-columns: 1fr 1fr; } .hm-triptych > :last-child { display: none; } }
+
+  /* ---- 11. Our story ---- */
+  .hm-story { background: #fff; padding: var(--sp100) var(--px); }
+  .hm-story__grid {
+    max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: .85fr 1fr; gap: 56px; align-items: center;
+  }
+  @media (max-width: 860px) { .hm-story__grid { grid-template-columns: 1fr; gap: 34px; } }
+  .hm-story__h2 { margin-top: 18px; }
+  .hm-story__paras { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+  .hm-story__paras p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--ink-soft); }
+  .hm-story__founders { display: flex; gap: 20px; margin-top: 28px; flex-wrap: wrap; }
+  .hm-founder { display: flex; align-items: center; gap: 12px; }
+  .hm-founder__name { font-size: 14px; font-weight: 700; }
+  .hm-founder__role { font-size: 12px; color: var(--grey-light); }
+
+  /* ---- 12. FAQs ---- */
+  .hm-faqs { background: #fff; padding: var(--sp96) var(--px); text-align: center; }
+  /* the design leaves this one heading on its natural line-height */
+  .hm-faqs__h2 { margin: 18px 0 44px; line-height: normal; }
+  .hm-faqs__body { text-align: left; }
+
+  /* ---- 13. Podcast ---- */
+  .hm-podcast { background: #fff; padding: var(--sp96) var(--px); text-align: center; }
+  .hm-podcast__lead { margin: 26px auto 0; max-width: 60ch; font-size: 16px; line-height: 1.6; color: var(--grey-text); }
+  .hm-guests { display: flex; gap: 20px; justify-content: center; margin-top: 52px; flex-wrap: wrap; }
+  .hm-guest { width: 150px; }
+  .hm-guest__name { margin-top: 14px; font-size: 14px; font-weight: 700; }
+  .hm-guest__biz { font-size: 12px; color: var(--grey-light); }
+  .hm-podstats {
+    max-width: 720px; margin: 60px auto 0; background: var(--card-blue); border: 1px solid var(--border-blue);
+    border-radius: 20px; padding: 34px 34px 30px; text-align: left;
+  }
+  .hm-podstats__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 560px) { .hm-podstats__grid { grid-template-columns: 1fr; } .hm-podstats { padding: 26px 22px 24px; } }
+  .hm-podstats__big { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; }
+  .hm-podstats__small { font-size: 12px; color: var(--grey-light); margin-top: 4px; }
+  .hm-podstats__cta { display: block; margin-top: 26px; padding: 16px; font-size: 15px; }
+  .hm-press {
+    max-width: 1000px; margin: 56px auto 0; display: flex; justify-content: space-between;
+    align-items: center; gap: 24px; flex-wrap: wrap; opacity: .55;
+  }
+  .hm-press span { font-size: 17px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; color: var(--ink); }
+  @media (max-width: 640px) { .hm-press { justify-content: center; gap: 16px; } .hm-press span { font-size: 14px; } }
+
+  /* ---- 14. Final CTA ---- */
+  .hm-final { background: var(--navy); color: #fff; padding: var(--sp120) var(--px); text-align: center; position: relative; overflow: hidden; }
+  .hm-final__glow {
+    position: absolute; inset: -40% 25% auto; height: 90%;
+    background: radial-gradient(circle, rgba(204,255,0,.16), transparent 65%);
+  }
+  .hm-final__inner { position: relative; }
+  .hm-final__h2 { margin-top: 22px; }
+  .hm-final__lead { margin: 26px auto 0; max-width: 50ch; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,.8); }
+  .hm-final__cta { margin-top: 38px; }
+  .hm-final__fine { margin: 20px 0 0; font-size: 12px; color: rgba(255,255,255,.6); }
+</style>

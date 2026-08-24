@@ -1,0 +1,83 @@
+---
+import Icon from './Icon.astro';
+
+/*
+  FAQ accordion. Single-open: opening a row closes the others, clicking the
+  open row closes it. The first row starts open, as in the design.
+
+  variant "plain" = Home  (+ / − signs, warm borders)
+  variant "boxed" = Pricing and Contact (Material add / remove icons)
+*/
+interface Props {
+  faqs: { q: string; a: string }[];
+  variant?: 'plain' | 'boxed';
+  id?: string;
+}
+
+const { faqs, variant = 'plain', id } = Astro.props;
+const group = id ?? 'faq';
+---
+
+<div class={`sh-faq ${variant === 'boxed' ? 'sh-faq--boxed' : ''}`} data-faq>
+  {faqs.map((f, i) => (
+    <div class="sh-faq__row">
+      <button
+        type="button"
+        class="sh-faq__btn"
+        aria-expanded={i === 0 ? 'true' : 'false'}
+        aria-controls={`${group}-panel-${i}`}
+        id={`${group}-btn-${i}`}
+      >
+        <span class="sh-faq__q">{f.q}</span>
+        <span class="sh-faq__sign" aria-hidden="true">
+          {variant === 'boxed' ? (
+            <>
+              <Icon name="add" size={22} class="sh-faq__closed" />
+              <Icon name="remove" size={22} class="sh-faq__opened" />
+            </>
+          ) : (
+            <>
+              <span class="sh-faq__closed">+</span>
+              <span class="sh-faq__opened">&minus;</span>
+            </>
+          )}
+        </span>
+      </button>
+      <div
+        class="sh-faq__panel"
+        id={`${group}-panel-${i}`}
+        role="region"
+        aria-labelledby={`${group}-btn-${i}`}
+        hidden={i !== 0}
+      >
+        <p class="sh-faq__a">{f.a}</p>
+      </div>
+    </div>
+  ))}
+  {variant === 'plain' && <div class="sh-faq__end"></div>}
+</div>
+
+<style is:global>
+  .sh-faq__btn[aria-expanded='false'] .sh-faq__opened { display: none; }
+  .sh-faq__btn[aria-expanded='true'] .sh-faq__closed { display: none; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((group) => {
+    const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('.sh-faq__btn'));
+
+    const paint = (btn: HTMLButtonElement, open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      const panel = document.getElementById(btn.getAttribute('aria-controls') || '');
+      if (panel) panel.hidden = !open;
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const wasOpen = btn.getAttribute('aria-expanded') === 'true';
+        buttons.forEach((b) => paint(b, false));
+        if (!wasOpen) paint(btn, true);
+      });
+    });
+  });
+</script>

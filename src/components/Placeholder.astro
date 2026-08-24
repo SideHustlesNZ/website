@@ -1,0 +1,51 @@
+---
+/*
+  Striped image placeholder.
+  Every one of these is a spot waiting for real photography from Rachel.
+  To swap one in: replace this component with an <img> at the same aspect
+  ratio / height and keep the border radius.
+*/
+interface Props {
+  label: string;
+  ratio?: string;   // e.g. "3/4"
+  height?: string;  // e.g. "300px" — use instead of ratio
+  radius?: string;
+  stripe?: '7' | '9' | '10' | '12' | 'fine';
+  circle?: boolean;
+  size?: string;
+  border?: string;
+  labelSize?: string;
+  class?: string;
+}
+
+const {
+  label,
+  ratio,
+  height,
+  radius = '0',
+  stripe = '10',
+  circle = false,
+  size,
+  border,
+  labelSize,
+  class: cls = '',
+} = Astro.props;
+
+const stripeClass =
+  stripe === 'fine' ? 'sh-ph--fine' : stripe === '10' ? '' : `sh-ph--${stripe}`;
+
+const style = [
+  circle && size ? `width:${size};height:${size};border-radius:50%` : '',
+  !circle && ratio ? `aspect-ratio:${ratio}` : '',
+  !circle && height ? `height:${height}` : '',
+  !circle ? `border-radius:${radius}` : '',
+  !circle ? 'width:100%' : '',
+  border ? `border:${border}` : '',
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<div class={`sh-ph ${stripeClass} ${cls}`} style={style} role="img" aria-label={`Placeholder: ${label}`}>
+  <span class="sh-ph__label" style={labelSize ? `font-size:${labelSize}` : undefined}>{label}</span>
+</div>

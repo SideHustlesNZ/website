@@ -1,0 +1,183 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { routes } from '../content/site';
+import { hero, members, banner, receipts, videoPlaceholder } from '../content/stories';
+
+/* the design builds the kicker from the member's location and trade */
+const cards = members.map((m) => ({
+  ...m,
+  first: m.name.split(' ')[0],
+  kicker: m.biz.split(' · ').reverse().join(' client | '),
+}));
+---
+
+<BaseLayout
+  title="Success stories — Side Hustles NZ"
+  description="Members on camera talking about what they were stuck on, what changed, and what the side hustle earns them now. No scripts, no actors, just Kiwis who started."
+  page="stories"
+>
+  <section class="ss-hero">
+    <div class="ss-badge">
+      <Icon name="play_circle" size={16} />
+      <span>{hero.badge}</span>
+    </div>
+    <h1 class="sh-h1-page ss-hero__h1">{hero.h1[0]}<span class="sh-accent">{hero.h1[1]}</span></h1>
+    <p class="ss-hero__lead">{hero.lead}</p>
+  </section>
+
+  <section class="ss-grid-sec">
+    <div class="ss-grid">
+      {cards.map((v) => (
+        <div class="ss-card">
+          <div class="ss-card__kicker">{v.kicker}</div>
+          <h2 class="ss-card__h2">What {v.first} Has To Say About Working With Us</h2>
+          <p class="ss-card__quote">&ldquo;{v.quote}&rdquo;</p>
+
+          {v.videoId ? (
+            <div class="ss-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${v.videoId}?rel=0`}
+                title={v.name}
+                loading="lazy"
+                allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+            </div>
+          ) : (
+            <div class="ss-video ss-video--empty" role="img" aria-label={`Video coming soon: ${v.name}`}>
+              <span class="ss-video__play" aria-hidden="true">▶</span>
+              <span class="ss-video__label">{videoPlaceholder}</span>
+            </div>
+          )}
+
+          <div class="ss-card__meta">
+            <span class="ss-card__result">{v.result}</span>
+            <span class="ss-card__div" aria-hidden="true"></span>
+            <span>{v.biz}</span>
+            <span class="ss-card__div" aria-hidden="true"></span>
+            <span>{v.length}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ss-banner-sec">
+    <div class="ss-banner">
+      <div class="ss-banner__text">
+        <div class="ss-banner__title">{banner.title}</div>
+        <div class="ss-banner__sub">{banner.sub}</div>
+      </div>
+      <a class="ss-banner__cta" href={routes.pricing + '#plans'}>
+        <span>{banner.cta}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="ss-receipts">
+    <div class="sh-wrap">
+      <div class="sh-center">
+        <h2 class="sh-h2-64">{receipts.h2}</h2>
+        <p class="ss-receipts__lead">{receipts.lead}</p>
+      </div>
+
+      <div class="ss-receipts__cols">
+        {receipts.heights.map((h, i) => (
+          <div class="ss-receipt">
+            <Placeholder label={`Screenshot ${i + 1}`} height={`${h}px`} radius="8px" />
+          </div>
+        ))}
+      </div>
+
+      {receipts.note && <p class="ss-receipts__note">{receipts.note}</p>}
+
+      <div class="ss-banner ss-banner--bottom">
+        <div class="ss-banner__text">
+          <div class="ss-banner__title">{banner.title}</div>
+          <div class="ss-banner__sub">{banner.sub}</div>
+        </div>
+        <a class="ss-banner__cta" href={routes.pricing + '#plans'}>
+          <span>{banner.cta}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ss-hero { padding: var(--sp80) var(--px) 0; text-align: center; }
+  .ss-badge {
+    display: inline-flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--border-blue-2);
+    border-radius: 999px; padding: 7px 14px 7px 10px; color: var(--navy);
+    font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .ss-hero__h1 { margin-top: 26px; }
+  .ss-hero__lead { margin: 24px auto 0; max-width: 56ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+
+  .ss-grid-sec { padding: 56px var(--px) 0; }
+  .ss-grid {
+    max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 72px; column-gap: 44px;
+  }
+  @media (max-width: 860px) { .ss-grid { grid-template-columns: 1fr; row-gap: 56px; } }
+  .ss-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+  .ss-card__kicker { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--grey-light); }
+  .ss-card__h2 {
+    margin: 0; font-size: clamp(24px, 4.4vw, 30px); line-height: 1.15; letter-spacing: -.02em;
+    font-weight: 700; color: var(--ink); text-wrap: balance;
+  }
+  .ss-card__quote { margin: 0; max-width: 52ch; font-size: 14px; line-height: 1.55; font-style: italic; color: var(--grey-text); }
+  .ss-video {
+    position: relative; width: 100%; aspect-ratio: 16/9; background: #0E0E1A; border-radius: 10px;
+    overflow: hidden; margin-top: 4px;
+  }
+  .ss-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .ss-video--empty {
+    background: repeating-linear-gradient(135deg, #E9E9E2 0 12px, #DEDED6 12px 24px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  }
+  .ss-video__play {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: var(--lime);
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .ss-video__label {
+    font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--placeholder-label);
+  }
+  .ss-card__meta {
+    display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--grey-muted); flex-wrap: wrap; justify-content: center;
+  }
+  .ss-card__result { font-weight: 700; color: var(--navy); letter-spacing: .06em; text-transform: uppercase; font-size: 11px; }
+  .ss-card__div { width: 1px; height: 11px; background: var(--border-blue-2); }
+
+  .ss-banner-sec { padding: 64px var(--px) 80px; }
+  .ss-banner {
+    max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
+    gap: 28px; flex-wrap: wrap; background: var(--navy); border-radius: 14px; padding: 22px 20px 22px 32px;
+  }
+  @media (max-width: 560px) { .ss-banner { padding: 22px; } }
+  .ss-banner--bottom { margin: 56px auto 0; }
+  .ss-banner__text { display: flex; flex-direction: column; gap: 5px; }
+  .ss-banner__title { font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: #fff; }
+  .ss-banner__sub { font-size: 13px; color: rgba(255,255,255,.75); }
+  .ss-banner__cta {
+    display: inline-flex; align-items: center; gap: 12px; background: var(--lime); color: var(--navy);
+    padding: 13px 14px 13px 22px; border-radius: 999px; font-size: 14px; font-weight: 800;
+  }
+  .ss-banner__cta:hover { background: var(--lime-hover); color: var(--navy); }
+
+  .ss-receipts { background: #fff; padding: var(--sp88) var(--px) var(--sp96); border-top: 1px solid var(--border-blue); }
+  .ss-receipts__lead { margin: 18px auto 0; max-width: 52ch; font-size: 16px; line-height: 1.6; color: var(--grey-text); }
+  .ss-receipts__cols { margin-top: 56px; column-count: 4; column-gap: 18px; }
+  @media (max-width: 980px) { .ss-receipts__cols { column-count: 2; } }
+  @media (max-width: 560px) { .ss-receipts__cols { column-count: 1; } }
+  .ss-receipt { break-inside: avoid; margin-bottom: 18px; }
+  .ss-receipts__note {
+    margin: 36px 0 0; text-align: center; font: 500 11px/1 var(--mono);
+    letter-spacing: .14em; text-transform: uppercase; color: #9A9AA4;
+  }
+</style>

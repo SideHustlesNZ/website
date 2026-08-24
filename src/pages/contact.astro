@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import { site } from '../content/site';
+import { hero, form, channels, channelsTitle, supportHours, faqSection, refunds } from '../content/contact';
+
+/*
+  With no form endpoint from Rachel yet, the form falls back to a mailto: so a
+  visitor's message still reaches her instead of vanishing. Swap `formAction`
+  in src/content/contact.ts for her real endpoint and this switches over.
+*/
+const usingMailto = !form.formAction;
+const action = form.formAction || `mailto:${site.email}`;
+---
+
+<BaseLayout
+  title="Contact — Side Hustles NZ"
+  description="Questions about membership, events or your account. A real person replies within one working day. Email hello@sidehustles.nz or send us a message."
+  page="contact"
+>
+  <section class="ct-hero">
+    <h1 class="sh-h1-page">{hero.h1[0]}<span class="sh-accent">{hero.h1[1]}</span></h1>
+    <p class="ct-hero__lead">{hero.lead}</p>
+  </section>
+
+  <section class="ct-main">
+    <div class="ct-grid">
+      <div class="ct-formside">
+        <div class="ct-kicker">{form.title}</div>
+
+        <form
+          class="ct-form"
+          id="ct-form"
+          action={action}
+          method={usingMailto ? 'get' : 'post'}
+          enctype={usingMailto ? 'text/plain' : undefined}
+        >
+          <div class="ct-row">
+            <input type="text" name="first_name" placeholder={form.fields.firstName} aria-label={form.fields.firstName} required />
+            <input type="text" name="last_name" placeholder={form.fields.lastName} aria-label={form.fields.lastName} required />
+          </div>
+          <div class="ct-row">
+            <input type="email" name="email" placeholder={form.fields.email} aria-label={form.fields.email} required />
+            <input type="tel" name="mobile" placeholder={form.fields.mobile} aria-label={form.fields.mobile} />
+          </div>
+
+          <select name="subject" aria-label={form.subjectLabel} required>
+            <option value="">{form.subjectLabel}</option>
+            {form.subjects.map((s) => <option value={s}>{s}</option>)}
+          </select>
+
+          <textarea rows="7" name="message" placeholder={form.fields.message} aria-label={form.fields.message} required></textarea>
+
+          <div class="ct-actions">
+            <button type="submit" class="ct-submit">{form.submit}</button>
+            <span class="ct-or">
+              {form.orEmail} <a href={`mailto:${site.email}`}>{site.email}</a>
+            </span>
+          </div>
+        </form>
+      </div>
+
+      <aside class="ct-side">
+        <div class="ct-kicker">{channelsTitle}</div>
+        <div class="ct-channels">
+          {channels.map((c) => {
+            const external = c.href.startsWith('http');
+            return (
+              <a href={c.href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined} class="ct-channel">
+                <div class="ct-channel__tile"><Icon name={c.icon as any} size={20} /></div>
+                <div>
+                  <div class="ct-channel__title">{c.title}</div>
+                  <p class="ct-channel__body">{c.body}</p>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        <div class="ct-hours">
+          <div class="ct-hours__title">{supportHours.title}</div>
+          <p class="ct-hours__body">{supportHours.body}</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="ct-faqs">
+    <div class="sh-wrap--820 sh-center">
+      <div class="sh-eyebrow sh-eyebrow--navy">{faqSection.eyebrow}</div>
+      <h2 class="sh-h2-60 ct-faqs__h2">{faqSection.h2[0]}<span class="sh-accent">{faqSection.h2[1]}</span></h2>
+    </div>
+    <div class="sh-wrap--820 ct-faqs__list">
+      <Faq faqs={faqSection.faqs} variant="boxed" id="contact-faq" />
+    </div>
+  </section>
+
+  <section id="refunds" class="ct-refunds">
+    <div class="ct-refunds__card">
+      <h2 class="ct-refunds__h2">{refunds.h2}</h2>
+      <p class="ct-refunds__body">
+        {refunds.bodyBefore}<a href={`mailto:${refunds.email}`} class="ct-refunds__link">{refunds.email}</a>{refunds.bodyAfter}
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ct-hero { padding: var(--sp80) var(--px) 0; text-align: center; }
+  .ct-hero__lead { margin: 22px auto 0; max-width: 52ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+
+  .ct-main { padding: 44px var(--px) 0; }
+  .ct-grid {
+    max-width: 1180px; margin: 0 auto; display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+    background: #fff; border: 1px solid var(--border-blue); border-radius: 28px; overflow: hidden;
+  }
+  @media (max-width: 900px) { .ct-grid { grid-template-columns: 1fr; } }
+
+  .ct-formside { padding: 38px 40px 40px; }
+  @media (max-width: 560px) { .ct-formside { padding: 28px 20px 30px; } }
+  .ct-kicker { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--navy); }
+
+  .ct-form { display: flex; flex-direction: column; gap: 16px; margin-top: 26px; max-width: 640px; }
+  .ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .ct-row { grid-template-columns: 1fr; } }
+  .ct-form input, .ct-form select, .ct-form textarea {
+    width: 100%; background: var(--card-blue); border: 1px solid var(--border-blue); border-radius: 14px;
+    padding: 17px 18px; font-size: 15px; color: var(--ink); font-family: inherit;
+  }
+  .ct-form select { appearance: none; }
+  .ct-form textarea { line-height: 1.6; resize: vertical; }
+  .ct-form input::placeholder, .ct-form textarea::placeholder { color: #9A9AA4; }
+  .ct-form input:focus, .ct-form select:focus, .ct-form textarea:focus { outline: none; border-color: var(--navy); }
+  .ct-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 6px; }
+  .ct-submit {
+    font-family: inherit; cursor: pointer; border: none; background: var(--navy); color: var(--lime);
+    border-radius: 999px; padding: 18px 34px; font-size: 15px; font-weight: 700;
+  }
+  .ct-submit:hover { background: var(--navy-deep); }
+  .ct-or { font-size: 13px; color: var(--grey-muted); }
+  .ct-or a { font-weight: 600; }
+
+  .ct-side {
+    background: linear-gradient(180deg, #FBFFEA, #fff); border-left: 1px solid var(--border-blue); padding: 38px 34px;
+  }
+  @media (max-width: 900px) { .ct-side { border-left: none; border-top: 1px solid var(--border-blue); } }
+  @media (max-width: 560px) { .ct-side { padding: 28px 20px; } }
+  .ct-channels { display: flex; flex-direction: column; gap: 24px; margin-top: 26px; }
+  .ct-channel { display: flex; gap: 14px; align-items: flex-start; color: inherit; }
+  .ct-channel:hover { color: inherit; }
+  .ct-channel:hover .ct-channel__title { color: var(--navy); }
+  .ct-channel__tile {
+    flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--tint-blue);
+    border: 1px solid var(--border-blue-2); color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ct-channel__title { font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+  .ct-channel__body { margin: 5px 0 0; font-size: 13px; line-height: 1.55; color: var(--grey-text); }
+  .ct-hours { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--border-blue); }
+  .ct-hours__title { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--grey-muted); }
+  .ct-hours__body { margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: var(--grey-text); }
+
+  .ct-faqs { padding: var(--sp96) var(--px) 0; }
+  .ct-faqs__h2 { margin-top: 20px; }
+  .ct-faqs__list { margin-top: 44px; }
+
+  .ct-refunds { padding: var(--sp80) var(--px) var(--sp100); }
+  .ct-refunds__card {
+    max-width: 820px; margin: 0 auto; background: #fff; border: 1px solid var(--border-blue);
+    border-radius: 28px; padding: 36px 40px;
+  }
+  @media (max-width: 560px) { .ct-refunds__card { padding: 26px 22px; } }
+  .ct-refunds__h2 { margin: 0; font-size: 24px; line-height: 1.25; letter-spacing: -.02em; font-weight: 700; }
+  .ct-refunds__body { margin: 12px 0 0; font-size: 15px; line-height: 1.7; color: var(--grey-text); }
+  .ct-refunds__link { font-weight: 600; }
+</style>

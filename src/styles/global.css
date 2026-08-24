@@ -1,0 +1,412 @@
+@import '@fontsource-variable/archivo/wght.css';
+@import '@fontsource-variable/archivo/wght-italic.css';
+
+/* ==========================================================================
+   Side Hustles NZ — design tokens
+   Values taken verbatim from export/README.md "Design tokens".
+   ========================================================================== */
+:root {
+  /* colour */
+  --navy: #191970;
+  --navy-deep: #0F0F45;
+  --lime: #CCFF00;
+  --lime-hover: #DBFF4D;
+  --ink: #14141C;
+  --ink-soft: #3A3A45;
+  --grey-text: #5A5A65;
+  --grey-light: #6B6B75;
+  --grey-muted: #8A8A94;
+  --white: #FFFFFF;
+  --tint-blue: #EEF1FA;
+  --card-blue: #F4F5FA;
+  --warm: #F9F9F7;
+  --modal-surface: #F7F7F4;
+  --border-blue: #E3E6F2;
+  --border-blue-2: #DFE3F0;
+  --border-warm: #E4E4DC;
+  --placeholder-label: #8A8A80;
+
+  /* type */
+  --font: 'Archivo Variable', Archivo, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, Menlo, monospace;
+
+  /* layout — these shrink on small screens, which scales every section at once */
+  --px: 32px;   /* horizontal page padding */
+  --sp80: 80px;
+  --sp84: 84px;
+  --sp88: 88px;
+  --sp96: 96px;
+  --sp100: 100px;
+  --sp110: 110px;
+  --sp120: 120px;
+  --hero-top: 150px;
+}
+
+@media (max-width: 860px) {
+  :root {
+    --sp80: 60px;
+    --sp84: 60px;
+    --sp88: 64px;
+    --sp96: 68px;
+    --sp100: 70px;
+    --sp110: 72px;
+    --sp120: 76px;
+    --hero-top: 104px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --px: 20px;
+    --sp80: 48px;
+    --sp84: 48px;
+    --sp88: 52px;
+    --sp96: 56px;
+    --sp100: 58px;
+    --sp110: 60px;
+    --sp120: 64px;
+    --hero-top: 88px;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; background: #fff; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: #fff;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+a { color: var(--navy); text-decoration: none; }
+a:hover { color: var(--navy-deep); }
+
+img, svg { display: block; max-width: 100%; }
+
+:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.on-navy :focus-visible, .sh-header--navy :focus-visible { outline-color: var(--lime); }
+
+p { text-wrap: pretty; }
+
+.sh-page { width: 100%; overflow-x: clip; }
+.sh-page--sub { background: var(--card-blue); color: var(--ink); min-height: 100vh; }
+
+.sh-wrap { max-width: 1180px; margin: 0 auto; }
+.sh-wrap--1100 { max-width: 1100px; margin: 0 auto; }
+.sh-wrap--1080 { max-width: 1080px; margin: 0 auto; }
+.sh-wrap--1000 { max-width: 1000px; margin: 0 auto; }
+.sh-wrap--820 { max-width: 820px; margin: 0 auto; }
+.sh-wrap--720 { max-width: 720px; margin: 0 auto; }
+
+.sh-center { text-align: center; }
+.sh-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ==========================================================================
+   Type scale — big display sizes use clamp() so they never overflow a phone.
+   Upper bound of every clamp is the exact px value from the design.
+   ========================================================================== */
+.sh-h1-hero,
+.sh-h1-page,
+.sh-h2-68,
+.sh-h2-64,
+.sh-h2-60,
+.sh-h2-56,
+.sh-h2-48,
+.sh-h2-44 {
+  margin: 0;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.sh-h1-hero { font-size: clamp(48px, 8.6vw, 88px); line-height: .92; letter-spacing: -.03em; }
+.sh-h1-page { font-size: clamp(42px, 10.5vw, 76px); line-height: .95; letter-spacing: -.035em; }
+.sh-h1-page--64 { font-size: clamp(40px, 9vw, 64px); }
+.sh-h2-68 { font-size: clamp(38px, 8.4vw, 68px); line-height: .95; letter-spacing: -.035em; }
+.sh-h2-64 { font-size: clamp(38px, 8vw, 64px); line-height: 1; letter-spacing: .02em; }
+.sh-h2-60 { font-size: clamp(36px, 7.4vw, 60px); line-height: 1; letter-spacing: -.03em; }
+.sh-h2-56 { font-size: clamp(34px, 7vw, 56px); line-height: 1; letter-spacing: -.03em; }
+.sh-h2-48 { font-size: clamp(32px, 6vw, 48px); line-height: 1.02; letter-spacing: -.03em; }
+.sh-h2-44 { font-size: clamp(30px, 5.6vw, 44px); line-height: 1; letter-spacing: -.03em; }
+
+.sh-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--grey-light);
+}
+.sh-eyebrow--navy { color: var(--navy); font-weight: 800; }
+.sh-eyebrow--lime { color: var(--lime); }
+.sh-lead { font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+.sh-accent { color: var(--navy); }
+.sh-accent-lime { color: var(--lime); }
+
+/* ==========================================================================
+   Buttons / pills
+   ========================================================================== */
+.sh-pill-lime {
+  display: inline-block; background: var(--lime); color: var(--navy);
+  font-weight: 700; border-radius: 999px; text-align: center;
+}
+.sh-pill-lime:hover { background: var(--lime-hover); color: var(--navy); }
+
+.sh-pill-navy {
+  display: inline-block; background: var(--navy); color: var(--lime);
+  font-weight: 700; border-radius: 999px; text-align: center;
+}
+.sh-pill-navy:hover { background: var(--navy-deep); color: var(--lime); }
+
+.sh-pill-outline {
+  display: block; border: 1px solid var(--navy); color: var(--navy);
+  font-weight: 700; border-radius: 999px; text-align: center;
+}
+.sh-pill-outline:hover { background: var(--navy); color: var(--lime); }
+
+/* the hero / final-CTA "price pill" */
+.sh-price-pill {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .2);
+  padding: 8px 8px 8px 18px; border-radius: 999px;
+  flex-wrap: wrap; justify-content: center;
+}
+.sh-price-pill:hover { background: rgba(255, 255, 255, .16); }
+.sh-price-pill__mark { width: 26px; height: 26px; border-radius: 7px; background: var(--lime); flex: none; }
+.sh-price-pill__label { color: #fff; font-size: 16px; font-weight: 700; }
+.sh-price-pill__div { width: 1px; height: 18px; background: rgba(255, 255, 255, .25); }
+.sh-price-pill__price { color: var(--lime); font-size: 16px; font-weight: 700; }
+.sh-price-pill__go {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--lime); color: var(--navy);
+  display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; flex: none;
+}
+.sh-price-pill:hover .sh-price-pill__go { background: var(--lime-hover); }
+
+/* ==========================================================================
+   Icons
+   ========================================================================== */
+.sh-icon { display: block; width: 1em; height: 1em; fill: currentColor; flex: none; }
+
+/* ==========================================================================
+   Image placeholders (striped) — real photography drops in at the same ratios
+   ========================================================================== */
+.sh-ph {
+  background: repeating-linear-gradient(135deg, #E9E9E2 0 10px, #DEDED6 10px 20px);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 12px; overflow: hidden;
+}
+.sh-ph--fine { background: repeating-linear-gradient(135deg, #E6E6DE 0 9px, #DCDCD2 9px 18px); }
+.sh-ph--9 { background: repeating-linear-gradient(135deg, #E9E9E2 0 9px, #DEDED6 9px 18px); }
+.sh-ph--7 { background: repeating-linear-gradient(135deg, #E9E9E2 0 7px, #DEDED6 7px 14px); }
+.sh-ph--12 { background: repeating-linear-gradient(135deg, #E9E9E2 0 12px, #DEDED6 12px 24px); }
+.sh-ph__label {
+  font: 500 10px/1.4 var(--mono); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--placeholder-label);
+}
+
+/* ==========================================================================
+   Header — shared shell, two skins: --navy (home hero) and --light (subpages)
+   ========================================================================== */
+.sh-header {
+  display: flex; align-items: center; gap: 24px;
+  padding: 16px 40px; position: relative; z-index: 30;
+}
+.sh-header--navy {
+  background: rgba(255, 255, 255, .06);
+  border-bottom: 1px solid rgba(255, 255, 255, .14);
+  backdrop-filter: blur(10px);
+}
+.sh-header--light { background: #fff; border-bottom: 1px solid var(--border-blue); }
+
+.sh-brand { display: flex; align-items: center; gap: 9px; flex: none; }
+.sh-brand__mark { width: 22px; height: 22px; border-radius: 6px; background: var(--lime); flex: none; }
+.sh-header--light .sh-brand__mark, .sh-foot__mark { border: 1px solid var(--navy); }
+.sh-brand__word { font-weight: 800; font-size: 15px; letter-spacing: -.02em; }
+.sh-header--navy .sh-brand__word { color: #fff; }
+.sh-header--light .sh-brand__word { color: var(--ink); }
+
+.sh-nav { display: flex; gap: 22px; margin-left: 16px; }
+.sh-nav a { font-size: 13px; font-weight: 500; }
+.sh-header--navy .sh-nav a { color: rgba(255, 255, 255, .75); }
+.sh-header--navy .sh-nav a:hover { color: #fff; }
+.sh-header--light .sh-nav a { color: var(--grey-light); }
+.sh-header--light .sh-nav a:hover { color: var(--navy); }
+.sh-header--navy .sh-nav a[aria-current='page'] { color: #fff; font-weight: 700; }
+.sh-header--light .sh-nav a[aria-current='page'] { color: var(--navy); font-weight: 700; }
+
+.sh-header__right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.sh-login { font-size: 13px; font-weight: 500; }
+.sh-header--navy .sh-login { color: rgba(255, 255, 255, .75); }
+.sh-header--navy .sh-login:hover { color: #fff; }
+.sh-header--light .sh-login { color: var(--grey-light); }
+.sh-header--light .sh-login:hover { color: var(--navy); }
+
+.sh-header__cta { font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 999px; white-space: nowrap; }
+
+.sh-bell {
+  flex: none; position: relative; width: 28px; height: 28px; border: none; background: none;
+  padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sh-header--navy .sh-bell { color: rgba(255, 255, 255, .6); }
+.sh-header--navy .sh-bell:hover { color: rgba(255, 255, 255, .9); }
+.sh-header--light .sh-bell { color: var(--grey-muted); }
+.sh-header--light .sh-bell:hover { color: var(--navy); }
+.sh-bell__dot { position: absolute; top: 1px; right: 1px; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+
+/* hamburger — hidden until the desktop nav runs out of room */
+.sh-burger {
+  display: none; flex: none; width: 34px; height: 34px; border: none; background: none;
+  padding: 0; cursor: pointer; align-items: center; justify-content: center;
+}
+.sh-header--navy .sh-burger { color: #fff; }
+.sh-header--light .sh-burger { color: var(--navy); }
+.sh-burger__bars { width: 20px; display: flex; flex-direction: column; gap: 5px; }
+.sh-burger__bars i { display: block; height: 2px; background: currentColor; border-radius: 2px; }
+
+/* full-screen navy sheet */
+.sh-sheet {
+  position: fixed; inset: 0; z-index: 2500; background: var(--navy);
+  display: none; flex-direction: column; padding: 18px 24px 32px;
+}
+.sh-sheet[data-open='true'] { display: flex; }
+.sh-sheet__top { display: flex; align-items: center; justify-content: space-between; }
+.sh-sheet__close {
+  width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, .22); border-radius: 50%;
+  background: none; color: #fff; font-size: 18px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.sh-sheet__links { display: flex; flex-direction: column; gap: 4px; margin-top: 40px; }
+.sh-sheet__links a {
+  color: #fff; font-size: 28px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: -.02em; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+.sh-sheet__links a:hover { color: var(--lime); }
+.sh-sheet__foot { margin-top: auto; display: flex; flex-direction: column; gap: 14px; }
+.sh-sheet__cta { display: block; padding: 17px; font-size: 16px; }
+.sh-sheet__login { color: rgba(255, 255, 255, .75); font-size: 14px; font-weight: 500; text-align: center; }
+
+@media (max-width: 900px) {
+  .sh-header { padding: 14px 20px; gap: 12px; }
+  .sh-nav, .sh-header__right .sh-login { display: none; }
+  .sh-burger { display: flex; }
+  /* the lime/navy signup CTA stays in the bar at every width */
+  .sh-header__cta { padding: 10px 14px; font-size: 12px; }
+}
+@media (max-width: 360px) {
+  .sh-header__cta { padding: 9px 12px; font-size: 11px; }
+}
+
+/* ==========================================================================
+   Subscribe modal
+   ========================================================================== */
+.sh-modal {
+  position: fixed; inset: 0; z-index: 3000; background: rgba(10, 10, 40, .55);
+  display: none; align-items: center; justify-content: center; padding: 24px;
+}
+.sh-modal[data-open='true'] { display: flex; }
+.sh-modal__panel {
+  position: relative; width: 100%; max-width: 520px; background: var(--modal-surface);
+  border-radius: 14px; padding: 44px 40px 40px; box-shadow: 0 30px 80px rgba(10, 10, 40, .4);
+}
+.sh-modal__close {
+  position: absolute; top: 14px; right: 16px; width: 32px; height: 32px; border: none;
+  background: none; color: var(--grey-text); font-size: 18px; line-height: 1; cursor: pointer; border-radius: 50%;
+}
+.sh-modal__close:hover { background: #E9E9E1; }
+.sh-modal__title { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -.01em; text-transform: uppercase; color: var(--ink); }
+.sh-modal__body { margin: 12px 0 0; font-size: 16px; line-height: 1.5; color: var(--navy); }
+.sh-modal__form { margin-top: 26px; display: flex; flex-direction: column; gap: 10px; }
+.sh-modal__label { font-size: 14px; font-weight: 600; color: var(--ink); }
+.sh-modal__input {
+  width: 100%; padding: 16px 18px; border: 1px solid #DEDED6; border-radius: 10px;
+  background: #fff; font-family: inherit; font-size: 16px; color: var(--ink); outline: none;
+}
+.sh-modal__input:focus { border-color: var(--navy); }
+.sh-modal__submit {
+  margin-top: 14px; width: 100%; padding: 18px 20px; border: none; border-radius: 999px;
+  background: var(--navy); color: var(--lime); font-family: inherit; font-size: 16px;
+  font-weight: 800; letter-spacing: .02em; text-transform: uppercase; cursor: pointer;
+}
+.sh-modal__submit:hover { background: var(--navy-deep); }
+.sh-modal__done {
+  margin-top: 26px; border: 1px solid #DEDED6; border-radius: 10px; background: #fff; padding: 22px 20px;
+}
+.sh-modal__done p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink); }
+.sh-modal__error { margin: 4px 0 0; font-size: 13px; color: #A11B1B; }
+@media (max-width: 520px) { .sh-modal__panel { padding: 40px 22px 26px; } }
+
+body[data-locked='true'] { overflow: hidden; }
+
+/* ==========================================================================
+   FAQ accordion
+   ========================================================================== */
+.sh-faq__row { border-top: 1px solid var(--border-warm); }
+.sh-faq__btn {
+  width: 100%; background: none; border: none; padding: 22px 0; display: flex;
+  align-items: center; justify-content: space-between; gap: 24px; cursor: pointer;
+  text-align: left; font-family: inherit; color: inherit;
+}
+.sh-faq__q { font-size: 17px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+.sh-faq__sign { font-size: 20px; color: var(--navy); flex: none; line-height: normal; }
+.sh-faq__a {
+  margin: 0; padding: 0 0 24px; max-width: 70ch; font-size: 15px; line-height: 1.65; color: var(--grey-text);
+}
+.sh-faq__panel[hidden] { display: none; }
+.sh-faq__end { border-top: 1px solid var(--border-warm); }
+
+/* boxed variant used on Pricing + Contact */
+.sh-faq--boxed { border-top: 1px solid var(--border-blue); }
+.sh-faq--boxed .sh-faq__row { border-top: none; border-bottom: 1px solid var(--border-blue); }
+.sh-faq--boxed .sh-faq__btn { padding: 24px 4px; gap: 20px; }
+.sh-faq--boxed .sh-faq__q { font-weight: 700; letter-spacing: -.015em; }
+.sh-faq--boxed .sh-faq__sign { font-size: 22px; line-height: 1; display: flex; }
+.sh-faq--boxed .sh-faq__a { padding: 0 60px 26px 4px; max-width: none; }
+@media (max-width: 640px) { .sh-faq--boxed .sh-faq__a { padding-right: 4px; } }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.sh-foot { background: #fff; padding: 56px var(--px) 36px; }
+.sh-foot__grid {
+  max-width: 1180px; margin: 0 auto; display: grid;
+  grid-template-columns: 1.5fr repeat(4, 1fr); gap: 32px;
+}
+.sh-foot__mark { width: 22px; height: 22px; border-radius: 6px; background: var(--lime); flex: none; }
+.sh-foot__blurb { margin: 14px 0 0; font-size: 13px; line-height: 1.6; color: var(--grey-light); max-width: 32ch; }
+.sh-foot__title { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.sh-foot__links { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
+.sh-foot__links a { color: var(--grey-light); font-size: 13px; }
+.sh-foot__links a:hover { color: var(--navy); }
+.sh-foot__bottom {
+  max-width: 1180px; margin: 40px auto 0; padding-top: 18px; border-top: 1px solid var(--border-warm);
+  display: flex; justify-content: space-between; font-size: 12px; color: var(--grey-muted);
+  flex-wrap: wrap; gap: 10px;
+}
+.sh-foot__bottom a { color: var(--grey-muted); }
+.sh-foot__bottom a:hover { color: var(--navy); }
+
+@media (max-width: 900px) { .sh-foot__grid { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 520px) { .sh-foot__grid { grid-template-columns: 1fr; gap: 26px; } }
+
+/* ==========================================================================
+   Quote marquee
+   ========================================================================== */
+@keyframes shnz-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.sh-marquee { display: flex; width: max-content; gap: 16px; animation: shnz-marquee 46s linear infinite; }
+.sh-marquee:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .sh-marquee { animation: none; width: 100%; overflow-x: auto; padding: 0 var(--px) 8px; scroll-snap-type: x mandatory; }
+  .sh-marquee > * { scroll-snap-align: start; }
+}
+
+/* anchor offsets so deep links don't hide content under the header */
+[id] { scroll-margin-top: 16px; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
