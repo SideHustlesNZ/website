@@ -7,7 +7,7 @@
 
 export const hero = {
   eyebrow: 'For Kiwis building something on the side',
-  h1: ['Stop planning', 'your side hustle.', 'Start running it.'], // last line is lime
+  h1: ['Turn ideas', 'Into income.'], // last line is lime
   lead:
     'A community for New Zealanders who are serious about turning an idea, a trade or a weekend gig into real income, with the people, accountability and structure to actually finish what you start.',
   ctaLabel: 'Join the community',
