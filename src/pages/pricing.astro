@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/Icon.astro';
 import Faq from '../components/Faq.astro';
-import { links, routes } from '../content/site';
-import { hero, annual, monthly, included, includedTitle, includedFootnote, faqSection } from '../content/pricing';
+import PlansBlock from '../components/PlansBlock.astro';
+import Community from '../components/Community.astro';
+import { routes } from '../content/site';
+import { hero, faqSection } from '../content/pricing';
 ---
 
 <BaseLayout
@@ -17,59 +18,7 @@ import { hero, annual, monthly, included, includedTitle, includedFootnote, faqSe
   </section>
 
   <section id="plans" class="pr-plans-sec">
-    <div class="pr-grid">
-      <div class="pr-plans">
-        <!-- Annual -->
-        <div class="pr-plan pr-plan--annual">
-          <div class="pr-plan__row">
-            <span class="pr-plan__label">{annual.label}</span>
-            <span class="pr-plan__save">{annual.save}</span>
-          </div>
-          <div class="pr-plan__offer">
-            <span class="pr-plan__badge">{annual.badge}</span>
-            <span class="pr-plan__was">{annual.wasPrice}</span>
-          </div>
-          <div class="pr-plan__price">
-            <span class="pr-plan__amount">{annual.price}</span>
-            <span class="pr-plan__per">{annual.per}</span>
-          </div>
-          <p class="pr-plan__fine">{annual.fine}</p>
-          <a class="sh-pill-navy pr-plan__cta" href={links.checkout} target="_blank" rel="noopener">{annual.cta}</a>
-        </div>
-
-        <!-- Monthly -->
-        <div class="pr-plan pr-plan--monthly">
-          <div class="pr-plan__row">
-            <span class="pr-plan__label">{monthly.label}</span>
-            <span class="pr-plan__tag">{monthly.tag}</span>
-          </div>
-          <div class="pr-plan__price pr-plan__price--monthly">
-            <span class="pr-plan__amount">{monthly.price}</span>
-            <span class="pr-plan__per">{monthly.per}</span>
-          </div>
-          <p class="pr-plan__fine">{monthly.fine}</p>
-          <a class="pr-plan__cta pr-plan__cta--outline" href={links.checkout} target="_blank" rel="noopener">
-            {monthly.cta}
-          </a>
-        </div>
-      </div>
-
-      <div class="pr-included">
-        <div class="pr-included__title">{includedTitle}</div>
-        <div class="pr-included__rows">
-          {included.map((i) => (
-            <div class="pr-inc">
-              <div class="pr-inc__tile"><Icon name={i.icon as any} size={20} /></div>
-              <div>
-                <div class="pr-inc__title">{i.title}</div>
-                <p class="pr-inc__body">{i.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p class="pr-included__note">{includedFootnote}</p>
-      </div>
-    </div>
+    <PlansBlock featured="annual" />
   </section>
 
   <section id="faqs" class="pr-faqs">
@@ -83,75 +32,23 @@ import { hero, annual, monthly, included, includedTitle, includedFootnote, faqSe
     </div>
 
     <div class="sh-wrap--820 sh-center pr-faqs__cta">
-      <div class="pr-talk">
+      <a class="pr-talk" href={routes.contact}>
         <span class="pr-talk__label">{faqSection.ctaLabel}</span>
-        <a class="pr-talk__go" href={routes.contact} aria-label={faqSection.ctaLabel}>→</a>
-      </div>
+        <span class="pr-talk__go" aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
+
+  <Community background="#fff" />
 </BaseLayout>
 
 <style>
-  .pr-hero { padding: var(--sp80) var(--px) 0; text-align: center; }
+  .pr-hero { padding: clamp(48px, 8vw, 80px) clamp(20px, 4vw, 32px) 0; text-align: center; }
   .pr-hero__lead { margin: 22px auto 0; max-width: 52ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
 
-  .pr-plans-sec { padding: 44px var(--px) 0; }
-  .pr-grid {
-    max-width: 1180px; margin: 0 auto; display: grid;
-    grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
-    background: #fff; border: 1px solid var(--border-blue); border-radius: 28px; overflow: hidden;
-  }
-  @media (max-width: 900px) { .pr-grid { grid-template-columns: 1fr; } }
+  .pr-plans-sec { padding: 44px clamp(20px, 4vw, 32px) 0; }
 
-  .pr-plans { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
-  @media (max-width: 520px) { .pr-plans { padding: 20px; } }
-
-  .pr-plan--annual {
-    border: 1px solid var(--navy); border-radius: 22px; background: linear-gradient(180deg, #FBFFEA, #fff);
-    padding: 26px; box-shadow: 0 14px 34px rgba(25, 25, 112, .1);
-  }
-  .pr-plan--monthly { border: 1px solid var(--border-blue); border-radius: 22px; background: #fff; padding: 26px; }
-  .pr-plan__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .pr-plan__label { font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
-  .pr-plan__save {
-    background: var(--navy); color: var(--lime); font-size: 11px; font-weight: 800;
-    border-radius: 999px; padding: 7px 13px; white-space: nowrap;
-  }
-  .pr-plan__tag { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--grey-muted); }
-  .pr-plan__offer { display: flex; align-items: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-  .pr-plan__badge {
-    background: var(--lime); color: var(--navy); font-size: 10px; font-weight: 800; letter-spacing: .14em;
-    text-transform: uppercase; border-radius: 6px; padding: 6px 9px;
-  }
-  .pr-plan__was { font-size: 14px; color: var(--grey-muted); text-decoration: line-through; }
-  .pr-plan__price { display: flex; align-items: flex-end; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-  .pr-plan__price--monthly { margin-top: 24px; }
-  .pr-plan__amount { font-size: clamp(48px, 12vw, 62px); line-height: .9; font-weight: 800; letter-spacing: -.04em; }
-  .pr-plan__per { font-size: 14px; font-weight: 600; color: var(--grey-text); padding-bottom: 6px; }
-  .pr-plan__fine { margin: 12px 0 0; font-size: 13px; color: var(--grey-light); }
-  .pr-plan__cta {
-    display: flex; align-items: center; justify-content: center; margin-top: 24px;
-    border-radius: 999px; padding: 18px; font-size: 15px; font-weight: 700;
-  }
-  .pr-plan__cta--outline { background: #fff; border: 1px solid var(--navy); color: var(--navy); }
-  .pr-plan__cta--outline:hover { background: var(--card-blue); color: var(--navy); }
-
-  .pr-included { background: #fff; border-left: 1px solid var(--border-blue); padding: 34px 38px; }
-  @media (max-width: 900px) { .pr-included { border-left: none; border-top: 1px solid var(--border-blue); } }
-  @media (max-width: 520px) { .pr-included { padding: 28px 20px; } }
-  .pr-included__title { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--navy); }
-  .pr-included__rows { display: flex; flex-direction: column; gap: 26px; margin-top: 26px; }
-  .pr-inc { display: flex; gap: 16px; align-items: flex-start; }
-  .pr-inc__tile {
-    flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--tint-blue);
-    border: 1px solid var(--border-blue-2); color: var(--navy);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .pr-inc__title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
-  .pr-inc__body { margin: 6px 0 0; font-size: 14px; line-height: 1.55; color: var(--grey-text); max-width: 52ch; }
-  .pr-included__note { margin: 30px 0 0; font-size: 12px; color: var(--grey-muted); }
-
-  .pr-faqs { padding: var(--sp96) var(--px) var(--sp100); scroll-margin-top: 24px; }
+  .pr-faqs { padding: clamp(56px, 9vw, 96px) clamp(20px, 4vw, 32px) clamp(58px, 9vw, 100px); scroll-margin-top: 24px; }
   .pr-faqs__h2 { margin-top: 20px; }
   .pr-faqs__list { margin-top: 44px; }
   .pr-faqs__cta { margin-top: 40px; }
@@ -159,10 +56,10 @@ import { hero, annual, monthly, included, includedTitle, includedFootnote, faqSe
     display: inline-flex; align-items: center; gap: 12px; background: var(--navy);
     padding: 8px 8px 8px 20px; border-radius: 999px; flex-wrap: wrap; justify-content: center;
   }
+  .pr-talk:hover { background: var(--navy-deep); }
   .pr-talk__label { color: #fff; font-size: 15px; font-weight: 700; }
   .pr-talk__go {
     width: 36px; height: 36px; border-radius: 50%; background: var(--lime); color: var(--navy);
     display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex: none;
   }
-  .pr-talk__go:hover { background: var(--lime-hover); color: var(--navy); }
 </style>

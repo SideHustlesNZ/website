@@ -1,0 +1,80 @@
+---
+/*
+  Pricing shell: plan cards on the left, "What's included" on the right.
+  Home features Monthly (with Annual below); Pricing features Annual.
+*/
+import Icon from './Icon.astro';
+import { links, plans, membershipIncluded } from '../content/site';
+
+interface Props {
+  featured: 'monthly' | 'annual';
+  showAnnual?: boolean;
+}
+const { featured, showAnnual = true } = Astro.props;
+const { monthly, annual } = plans;
+
+const order = featured === 'monthly' ? ['monthly', 'annual'] : ['annual', 'monthly'];
+const cards = order.filter((k) => k === 'monthly' || showAnnual);
+---
+
+<div class="sh-plans-shell">
+  <div class="sh-plans">
+    {cards.map((k) => {
+      const isFeatured = k === featured;
+      if (k === 'monthly') {
+        return (
+          <div class={`sh-plan ${isFeatured ? 'sh-plan--featured' : ''}`}>
+            <div class="sh-plan__row">
+              <span class="sh-plan__label">{monthly.label}</span>
+              {isFeatured
+                ? <span class="sh-plan__pill">{monthly.popular}</span>
+                : <span class="sh-plan__tag sh-plan__tag--grey">{monthly.tag}</span>}
+            </div>
+            <div class="sh-plan__price sh-plan__price--24">
+              <span class="sh-plan__amount">{monthly.price}</span>
+              <span class="sh-plan__per">{monthly.per}</span>
+            </div>
+            <p class="sh-plan__fine">{monthly.fine}</p>
+            <a class={`sh-plan__cta ${isFeatured ? 'sh-plan__cta--navy' : 'sh-plan__cta--outline'}`} href={links.checkout} target="_blank" rel="noopener">{monthly.cta}</a>
+          </div>
+        );
+      }
+      return (
+        <div class={`sh-plan ${isFeatured ? 'sh-plan--featured' : ''}`}>
+          <div class="sh-plan__row">
+            <span class="sh-plan__label">{annual.label}</span>
+            {isFeatured
+              ? <span class="sh-plan__pill">{annual.save}</span>
+              : <span class="sh-plan__tag">{annual.save}</span>}
+          </div>
+          <div class="sh-plan__offer">
+            <span class="sh-plan__badge">{annual.badge}</span>
+            <span class="sh-plan__was">{annual.wasPrice}</span>
+          </div>
+          <div class="sh-plan__price">
+            <span class="sh-plan__amount">{annual.price}</span>
+            <span class="sh-plan__per">{annual.per}</span>
+          </div>
+          <p class="sh-plan__fine">{annual.fine}</p>
+          <a class={`sh-plan__cta ${isFeatured ? 'sh-plan__cta--navy' : 'sh-plan__cta--outline'}`} href={links.checkout} target="_blank" rel="noopener">{annual.cta}</a>
+        </div>
+      );
+    })}
+  </div>
+
+  <div class="sh-plans-inc">
+    <div class="sh-plans-inc__title">{plans.includedTitle}</div>
+    <div class="sh-plans-inc__rows">
+      {membershipIncluded.map((i) => (
+        <div class="sh-inc">
+          <div class="sh-inc__tile"><Icon name={i.icon as any} size={20} /></div>
+          <div>
+            <div class="sh-inc__title">{i.title}</div>
+            <p class="sh-inc__body">{i.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    {showAnnual && <p class="sh-plans-inc__note">{plans.footnote}</p>}
+  </div>
+</div>

@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
+import Community from '../components/Community.astro';
 import { links } from '../content/site';
-import { founder, intro, gallery } from '../content/about';
+import { founder, intro } from '../content/about';
 ---
 
 <BaseLayout
@@ -14,7 +14,8 @@ import { founder, intro, gallery } from '../content/about';
     <div class="ab-grid">
       <div class="ab-portrait">
         <div class="ab-portrait__frame">
-          <Placeholder label={founder.portrait} height="520px" radius="22px" />
+          <img class="ab-portrait__img" src="/images/founder.jpg" alt={founder.photoAlt} />
+          <div class="ab-portrait__scrim" aria-hidden="true"></div>
           <div class="ab-portrait__caption">
             <div class="ab-portrait__name">{founder.name}</div>
             <div class="ab-portrait__role">{founder.role}</div>
@@ -41,15 +42,11 @@ import { founder, intro, gallery } from '../content/about';
     </div>
   </section>
 
-  <section class="ab-gallery-sec">
-    <div class="ab-gallery">
-      {gallery.map((label) => <Placeholder label={label} height="300px" radius="20px" />)}
-    </div>
-  </section>
+  <Community background="#fff" />
 </BaseLayout>
 
 <style>
-  .ab-intro-sec { padding: var(--sp84) var(--px) 0; }
+  .ab-intro-sec { padding: clamp(48px, 8vw, 84px) clamp(20px, 4vw, 32px) clamp(56px, 9vw, 96px); }
   .ab-grid {
     max-width: 1180px; margin: 0 auto; display: grid;
     grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 64px; align-items: start;
@@ -57,14 +54,22 @@ import { founder, intro, gallery } from '../content/about';
   @media (max-width: 900px) { .ab-grid { grid-template-columns: 1fr; gap: 36px; } }
 
   .ab-portrait__frame { position: relative; }
+  .ab-portrait__img {
+    display: block; width: 100%; height: 520px; object-fit: cover; object-position: 50% 30%;
+    border-radius: 22px; background: #E9E9E2;
+  }
+  .ab-portrait__scrim {
+    position: absolute; inset: 0; border-radius: 22px; pointer-events: none;
+    background: linear-gradient(180deg, rgba(10,10,50,0) 55%, rgba(10,10,50,.8));
+  }
   .ab-portrait__caption { position: absolute; left: 0; right: 0; bottom: 34px; padding: 0 26px; pointer-events: none; }
   .ab-portrait__name {
     font-size: clamp(26px, 5vw, 34px); line-height: 1; font-weight: 800; font-style: italic; letter-spacing: -.02em;
-    text-transform: uppercase; color: var(--navy); text-shadow: 0 1px 14px rgba(255, 255, 255, .65);
+    text-transform: uppercase; color: #fff;
   }
   .ab-portrait__role {
     margin-top: 8px; font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-    color: var(--navy); text-shadow: 0 1px 14px rgba(255, 255, 255, .65);
+    color: var(--lime);
   }
   .ab-social { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding-left: 26px; }
   .ab-social a { display: flex; color: var(--navy); }
@@ -78,9 +83,4 @@ import { founder, intro, gallery } from '../content/about';
   .ab-body { display: flex; flex-direction: column; gap: 22px; margin-top: 32px; max-width: 62ch; }
   .ab-body p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--grey-text); }
 
-  .ab-gallery-sec { padding: var(--sp88) var(--px) var(--sp100); }
-  .ab-gallery {
-    max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px;
-  }
-  @media (max-width: 900px) { .ab-gallery { grid-template-columns: 1fr; gap: 18px; } }
 </style>

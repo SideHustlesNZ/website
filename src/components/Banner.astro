@@ -1,0 +1,20 @@
+---
+/* Navy "join" strip: title + small print on the left, lime button on the right. */
+import { routes } from '../content/site';
+
+interface Props {
+  title: string;
+  sub: string;
+  cta: string;
+  href?: string;
+}
+const { title, sub, cta, href = routes.pricing + '#plans' } = Astro.props;
+---
+
+<div class="sh-banner">
+  <div class="sh-banner__text">
+    <div class="sh-banner__title">{title}</div>
+    <div class="sh-banner__sub">{sub}</div>
+  </div>
+  <a class="sh-banner__cta" href={href}><span>{cta}</span><span aria-hidden="true">→</span></a>
+</div>

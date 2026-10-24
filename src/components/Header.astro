@@ -1,5 +1,5 @@
 ---
-import { site, links, nav, headerCta, type NavKey } from '../content/site';
+import { site, links, navItems, header, type NavKey } from '../content/site';
 
 interface Props {
   page: NavKey;
@@ -7,8 +7,6 @@ interface Props {
 }
 
 const { page, variant = 'light' } = Astro.props;
-const items = nav[page];
-const cta = headerCta[page];
 const ctaClass = variant === 'navy' ? 'sh-pill-lime' : 'sh-pill-navy';
 ---
 
@@ -19,14 +17,14 @@ const ctaClass = variant === 'navy' ? 'sh-pill-lime' : 'sh-pill-navy';
   </a>
 
   <nav class="sh-nav" aria-label="Main">
-    {items.map((i) => (
-      <a href={i.href} aria-current={i.current ? 'page' : undefined}>{i.label}</a>
+    {navItems.map((i) => (
+      <a href={i.href} aria-current={i.key === page ? 'page' : undefined}>{i.label}</a>
     ))}
   </nav>
 
   <div class="sh-header__right">
-    <a class="sh-login" href={links.skool}>Log in</a>
-    <a class={`sh-header__cta ${ctaClass}`} href={cta}>Join the community</a>
+    <a class="sh-login" href={links.community}>{header.login}</a>
+    <a class={`sh-header__cta ${ctaClass}`} href={links.checkout} target="_blank" rel="noopener">{header.cta}</a>
 
     <button
       type="button"
@@ -45,8 +43,7 @@ const ctaClass = variant === 'navy' ? 'sh-pill-lime' : 'sh-pill-navy';
   </div>
 </div>
 
-<!-- Mobile menu: full-screen navy sheet. The lime/navy Join button stays in the
-     bar itself at every width, so signing up from a phone never needs this. -->
+<!-- Mobile menu: full-screen navy sheet (900px and below). -->
 <div class="sh-sheet" id="sh-menu" data-open="false" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="sh-sheet__top">
     <span class="sh-brand">
@@ -57,13 +54,12 @@ const ctaClass = variant === 'navy' ? 'sh-pill-lime' : 'sh-pill-navy';
   </div>
 
   <nav class="sh-sheet__links" aria-label="Mobile">
-    {items.map((i) => <a href={i.href}>{i.label}</a>)}
-    <a href="/contact/">Contact</a>
+    {navItems.map((i) => <a href={i.href}>{i.label}</a>)}
   </nav>
 
   <div class="sh-sheet__foot">
-    <a class="sh-sheet__cta sh-pill-lime" href={cta}>Join the community</a>
-    <a class="sh-sheet__login" href={links.skool}>Log in</a>
+    <a class="sh-sheet__cta sh-pill-lime" href={links.checkout} target="_blank" rel="noopener">{header.cta}</a>
+    <a class="sh-sheet__login" href={links.community}>{header.login}</a>
   </div>
 </div>
 

@@ -1,5 +1,5 @@
 ---
-import { site, footerCols, routes } from '../content/site';
+import { site, footerCols, footerLegal } from '../content/site';
 ---
 
 <footer class="sh-foot">
@@ -16,7 +16,9 @@ import { site, footerCols, routes } from '../content/site';
       <div>
         <div class="sh-foot__title">{col.title}</div>
         <div class="sh-foot__links">
-          {col.links.map((l) => <a href={l.href}>{l.label}</a>)}
+          {col.links.map((l) => (
+            <a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a>
+          ))}
         </div>
       </div>
     ))}
@@ -24,6 +26,8 @@ import { site, footerCols, routes } from '../content/site';
 
   <div class="sh-foot__bottom">
     <span>{site.copyright}</span>
-    <a href={routes.privacy}>Privacy Policy</a>
+    <div class="sh-foot__legal">
+      {footerLegal.map((l) => <a href={l.href}>{l.label}</a>)}
+    </div>
   </div>
 </footer>

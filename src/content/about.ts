@@ -3,7 +3,7 @@
 */
 
 export const founder = {
-  portrait: 'Founder portrait',
+  photoAlt: 'Rachel Mills, founder of Side Hustles NZ',
   name: 'Rachel Mills',
   role: 'Founder of Side Hustles NZ',
 };
@@ -19,5 +19,3 @@ export const intro = {
     'What we are building is a crew: people who share what actually worked, answer the awkward money questions honestly, and stay in it with you as the side hustle turns into the main thing.',
   ],
 };
-
-export const gallery = ['Meetup photo', 'Members in conversation', 'Event room'];

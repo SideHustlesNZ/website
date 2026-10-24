@@ -1,0 +1,134 @@
+---
+/*
+  Shared layout for Privacy Policy and Terms of Service: hero, numbered
+  sections in a white card, contact box, and a sticky "On this page" panel.
+  Anything passed in the default slot appears at the top of the card.
+*/
+import type { LegalSection, LegalText } from '../content/legal';
+
+interface Props {
+  hero: { eyebrow: string; h1: string[]; lead: string; updated: string };
+  toc: { title: string; note: string };
+  sections: LegalSection[];
+  contactBox: { title: string; before: string; email: string; middle: string; linkLabel: string; after: string };
+  contactLink: string;
+  /* Privacy starts straight into section 01, so it gets no rule above it. */
+  ruleFirst?: boolean;
+}
+const { hero, toc, sections, contactBox, contactLink, ruleFirst = true } = Astro.props;
+const numbered = sections.map((s, i) => ({ ...s, num: String(i + 1).padStart(2, '0') }));
+const isEmpty = (t: LegalText) => !t.label && !t.body;
+---
+
+<section class="pp-hero">
+  <div class="sh-eyebrow sh-eyebrow--navy">{hero.eyebrow}</div>
+  <h1 class="sh-h1-page pp-hero__h1">{hero.h1[0]}<span class="sh-accent">{hero.h1[1]}</span></h1>
+  <p class="pp-hero__lead">{hero.lead}</p>
+  <div class="pp-hero__updated">{hero.updated}</div>
+</section>
+
+<section class="pp-body-sec">
+  <div class="pp-grid">
+    <article class="pp-doc">
+      <slot />
+
+      {numbered.map((s, i) => (
+        <div class={`pp-section ${i === 0 && !ruleFirst ? 'pp-section--first' : ''}`} id={s.id}>
+          <div class="pp-section__head">
+            <span class="pp-section__num">{s.num}</span>
+            <h2 class="pp-section__title">{s.title}</h2>
+          </div>
+          {s.paras.filter((t) => !isEmpty(t)).map((t) => <p class="pp-para">{t.label && <strong>{t.label}</strong>}{t.body}</p>)}
+          {s.items.length > 0 && (
+            <div class="pp-list">
+              {s.items.map((it) => (
+                <div class="pp-item">
+                  <span class="pp-item__dot" aria-hidden="true"></span>
+                  <div class="pp-item__text">{it.label && <strong>{it.label}</strong>}{it.body}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {s.after.map((t) => <p class="pp-para">{t.label && <strong>{t.label}</strong>}{t.body}</p>)}
+        </div>
+      ))}
+
+      <div class="pp-contact">
+        <div class="sh-eyebrow sh-eyebrow--navy">{contactBox.title}</div>
+        <p class="pp-contact__body">
+          {contactBox.before}<a href={`mailto:${contactBox.email}`} class="pp-contact__link">{contactBox.email}</a>{contactBox.middle}<a href={contactLink} class="pp-contact__link">{contactBox.linkLabel}</a>{contactBox.after}
+        </p>
+      </div>
+    </article>
+
+    <nav class="pp-toc" aria-label={toc.title}>
+      <div class="sh-eyebrow sh-eyebrow--navy">{toc.title}</div>
+      <div class="pp-toc__links">
+        {numbered.map((s) => (
+          <a href={`#${s.id}`}>
+            <span class="pp-toc__num">{s.num}</span>
+            <span>{s.title}</span>
+          </a>
+        ))}
+      </div>
+      <div class="pp-toc__note"><p>{toc.note}</p></div>
+    </nav>
+  </div>
+</section>
+
+<style is:global>
+  .pp-hero { padding: clamp(48px, 8vw, 80px) clamp(20px, 4vw, 32px) 0; text-align: center; }
+  .pp-hero__h1 { margin-top: 20px; }
+  .pp-hero__lead { margin: 22px auto 0; max-width: 56ch; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+  .pp-hero__updated {
+    margin-top: 22px; font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--grey-muted);
+  }
+
+  .pp-body-sec { padding: 52px clamp(20px, 4vw, 32px) calc(clamp(56px, 9vw, 96px) + 24px); }
+  .pp-grid {
+    max-width: 1180px; margin: 0 auto; display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px); gap: 24px; align-items: start;
+  }
+  @media (max-width: 900px) { .pp-grid { grid-template-columns: 1fr; } }
+
+  .pp-doc {
+    background: #fff; border: 1px solid var(--border-blue); border-radius: 28px;
+    padding: clamp(28px, 4vw, 40px) clamp(22px, 4vw, 44px) clamp(32px, 4vw, 44px);
+  }
+  .pp-para { margin: 14px 0 0; font-size: 16px; line-height: 1.75; color: var(--ink-soft); }
+  .pp-para strong, .pp-item__text strong { font-weight: 700; color: var(--ink); }
+
+  .pp-section { margin-top: 38px; padding-top: 32px; border-top: 1px solid var(--border-blue); scroll-margin-top: 24px; }
+  .pp-section--first { margin-top: 0; padding-top: 0; border-top: none; }
+  .pp-section__head { display: flex; align-items: baseline; gap: 14px; }
+  .pp-section__num { font-size: 12px; font-weight: 800; letter-spacing: .08em; color: var(--navy); }
+  .pp-section__title { margin: 0; font-size: clamp(21px, 3.4vw, 26px); line-height: 1.2; letter-spacing: -.025em; font-weight: 800; }
+
+  .pp-list { display: flex; flex-direction: column; gap: 11px; margin-top: 18px; }
+  .pp-item { display: flex; gap: 12px; align-items: flex-start; }
+  .pp-item__dot {
+    flex: none; width: 7px; height: 7px; margin-top: 8px; border-radius: 2px; box-sizing: content-box;
+    background: var(--lime); border: 1px solid var(--navy);
+  }
+  .pp-item__text { font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
+
+  .pp-contact {
+    margin-top: 40px; padding: clamp(22px, 3vw, 28px) clamp(20px, 3vw, 30px);
+    background: #FBFFEA; border: 1px solid var(--border-blue); border-radius: 20px;
+  }
+  .pp-contact__body { margin: 12px 0 0; font-size: 15px; line-height: 1.7; color: var(--ink-soft); }
+  .pp-contact__link { font-weight: 700; }
+
+  .pp-toc {
+    background: #fff; border: 1px solid var(--border-blue); border-radius: 28px; padding: 30px 28px;
+    position: sticky; top: 24px;
+  }
+  @media (max-width: 900px) { .pp-toc { position: static; grid-row: 1; } }
+  .pp-toc__links { display: flex; flex-direction: column; gap: 2px; margin-top: 18px; }
+  .pp-toc__links a { display: flex; gap: 10px; font-size: 14px; line-height: 1.5; color: var(--grey-text); padding: 7px 0; }
+  .pp-toc__links a:hover { color: var(--navy); }
+  .pp-toc__num { flex: none; color: #B4B4BE; font-weight: 700; font-size: 12px; padding-top: 2px; }
+  .pp-toc__note { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-blue); }
+  .pp-toc__note p { margin: 0; font-size: 13px; line-height: 1.6; color: var(--grey-muted); }
+</style>

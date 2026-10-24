@@ -1,0 +1,55 @@
+---
+/*
+  "55,000 Kiwis, already here." block, used on Home, Pricing and About.
+  Member photos are decorative (aria-hidden). Above 1000px they scatter around
+  the edges, clear of the 620px text column; below that a second, smaller set
+  clusters above and below the text.
+*/
+import { community } from '../content/site';
+
+interface Props {
+  background?: string;
+}
+const { background = '#fff' } = Astro.props;
+
+const sc = (side: 'L' | 'R', f: number, top: number, size: number) => {
+  const pos = `calc((50% - 310px - ${size}px) * ${f})`;
+  return { top: `${top}%`, bottom: 'auto', left: side === 'L' ? pos : 'auto', right: side === 'R' ? pos : 'auto', size: `${size}px` };
+};
+const wide = [
+  sc('L', 0.08, 8, 72), sc('L', 0.78, 4, 52), sc('L', 0.45, 34, 88), sc('L', 0.05, 60, 58), sc('L', 0.82, 58, 48), sc('L', 0.42, 78, 62),
+  sc('R', 0.12, 6, 64), sc('R', 0.72, 22, 50), sc('R', 0.32, 42, 84), sc('R', 0.86, 64, 56), sc('R', 0.1, 76, 70),
+].map((m, i) => ({ ...m, img: community.faces[i] }));
+
+const mPos: [string, number, string, string, number][] = [
+  ['L', 6, 'T', '28px', 50], ['L', 34, 'T', '10px', 38], ['L', 62, 'T', '40px', 46], ['L', 86, 'T', '14px', 40],
+  ['L', 4, 'T', '104px', 40], ['R', 4, 'T', '94px', 46], ['L', 12, 'T', '154px', 34], ['R', 10, 'T', '158px', 38],
+  ['L', 12, 'B', '26px', 46], ['L', 48, 'B', '12px', 40], ['L', 78, 'B', '34px', 52],
+];
+const narrow = mPos.map(([side, x, v, y, s], i) => {
+  const h = `calc(${x}% - ${Math.round((s * x) / 100)}px)`;
+  return {
+    left: side === 'L' ? h : 'auto', right: side === 'R' ? h : 'auto',
+    top: v === 'T' ? y : 'auto', bottom: v === 'B' ? y : 'auto', size: `${s}px`, img: community.faces[i],
+  };
+});
+const style = (m: { top: string; bottom: string; left: string; right: string; size: string }) =>
+  `top:${m.top};bottom:${m.bottom};left:${m.left};right:${m.right};width:${m.size};height:${m.size}`;
+---
+
+<section id="stories" class="sh-community" style={`background:${background}`}>
+  <div class="sh-community__wide" aria-hidden="true">
+    {wide.map((m) => (
+      <div class="sh-face" style={style(m)}><img src={m.img} alt="" loading="lazy" /></div>
+    ))}
+  </div>
+  <div class="sh-community__narrow" aria-hidden="true">
+    {narrow.map((m) => (
+      <div class="sh-face sh-face--sm" style={style(m)}><img src={m.img} alt="" loading="lazy" /></div>
+    ))}
+  </div>
+  <div class="sh-community__spacer" aria-hidden="true"></div>
+  <h2 class="sh-h2-56 sh-community__h2">{community.h2[0]}<br /><span class="sh-accent">{community.h2[1]}</span></h2>
+  <p class="sh-community__lead">{community.lead}</p>
+  <div class="sh-community__spacer" aria-hidden="true"></div>
+</section>

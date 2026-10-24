@@ -20,7 +20,7 @@ export const notfound = {
   quickLinks: [
     { label: 'Pricing', href: '/pricing/' },
     { label: 'Library', href: '/library/' },
-    { label: 'Success stories', href: '/success-stories/' },
+    { label: 'Results', href: '/success-stories/' },
     { label: 'Contact', href: '/contact/' },
   ],
 };

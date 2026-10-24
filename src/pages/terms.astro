@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LegalDoc from '../components/LegalDoc.astro';
+import { routes } from '../content/site';
+import { hero, toc, shortVersion, intro, sections, contactBox } from '../content/terms';
+---
+
+<BaseLayout
+  title="Terms of service — Side Hustles NZ"
+  description="The terms for Side Hustles NZ memberships, digital products, events and advisory, set out plainly. Your rights under New Zealand consumer law always stand."
+  page="privacy"
+>
+  <LegalDoc hero={hero} toc={toc} sections={sections} contactBox={contactBox} contactLink={routes.privacy}>
+    <div class="tos-short">
+      <div class="sh-eyebrow sh-eyebrow--navy">{shortVersion.title}</div>
+      <div class="pp-list tos-short__list">
+        {shortVersion.points.map((p) => (
+          <div class="pp-item">
+            <span class="pp-item__dot" aria-hidden="true"></span>
+            <div class="pp-item__text">{p}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    {intro.map((t, i) => (
+      <p class="pp-para" style={i === 0 ? 'margin-top:28px' : undefined}>{t.label && <strong>{t.label}</strong>}{t.body}</p>
+    ))}
+  </LegalDoc>
+</BaseLayout>
+
+<style>
+  .tos-short {
+    padding: clamp(22px, 3vw, 28px) clamp(20px, 3vw, 30px);
+    background: #FBFFEA; border: 1px solid var(--border-blue); border-radius: 20px;
+  }
+  .tos-short__list { margin-top: 16px; }
+</style>

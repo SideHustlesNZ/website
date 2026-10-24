@@ -51,13 +51,13 @@ export const channels = [
   {
     icon: 'credit_card',
     title: 'Billing and account',
-    href: 'https://www.skool.com/sidehustlesnz',
+    href: 'https://community.sidehustles.nz/',
     body: 'Manage or cancel your plan yourself from your account, or ask us to do it.',
   },
   {
     icon: 'groups',
     title: 'Members',
-    href: 'https://www.skool.com/sidehustlesnz',
+    href: 'https://community.sidehustles.nz/',
     body: 'Already inside? Post in the community and a coach will pick it up on the next call.',
   },
   {

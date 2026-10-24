@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Banner from '../../components/Banner.astro';
+import { routes } from '../../content/site';
+import { blogPage, posts } from '../../content/blog';
+
+const [featured] = posts;
+const href = (slug: string) => `${routes.blog}${slug}/`;
+---
+
+<BaseLayout title={blogPage.title} description={blogPage.description} page="blog">
+  <section class="bl-hero">
+    <h1 class="sh-h1-page">{blogPage.h1[0]}<span class="sh-accent">{blogPage.h1[1]}</span></h1>
+    <p class="bl-hero__lead">{blogPage.lead}</p>
+  </section>
+
+  <section class="bl-cats-sec">
+    <div class="bl-cats" role="group" aria-label="Filter posts">
+      {blogPage.categories.map((c, i) => (
+        <button type="button" class="bl-cat" data-cat={c} aria-pressed={i === 0 ? 'true' : 'false'}>{c}</button>
+      ))}
+    </div>
+  </section>
+
+  <section class="bl-featured-sec" id="bl-featured">
+    <a class="bl-featured" href={href(featured.slug)}>
+      <div class="bl-featured__img" role="img" aria-label="Featured image"><span class="sh-ph__label">Featured image</span></div>
+      <div class="bl-featured__body">
+        <div class="bl-featured__tags">
+          <span class="bl-featured__badge">{blogPage.featuredLabel}</span>
+          <span class="bl-featured__cat">{featured.cat}</span>
+        </div>
+        <h2 class="bl-featured__title">{featured.title}</h2>
+        <p class="bl-featured__excerpt">{featured.excerpt}</p>
+        <div class="bl-meta"><span>{featured.date}</span><span class="bl-meta__div"></span><span>{featured.read}</span></div>
+        <span class="bl-featured__more">{blogPage.readMore}</span>
+      </div>
+    </a>
+  </section>
+
+  <section class="bl-grid-sec">
+    <div class="bl-grid" id="bl-grid">
+      {posts.map((p, i) => (
+        <a class="bl-card" href={href(p.slug)} data-cat={p.cat} data-featured={i === 0 ? 'true' : undefined} hidden={i === 0}>
+          <div class="bl-card__img" role="img" aria-label="Post image"><span class="sh-ph__label">Post image</span></div>
+          <div class="bl-card__body">
+            <div class="bl-card__cat">{p.cat}</div>
+            <h3 class="bl-card__title">{p.title}</h3>
+            <p class="bl-card__excerpt">{p.excerpt}</p>
+            <div class="bl-meta bl-card__meta"><span>{p.date}</span><span class="bl-meta__div"></span><span>{p.read}</span></div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="bl-banner-sec">
+    <Banner {...blogPage.banner} />
+  </section>
+</BaseLayout>
+
+<script>
+  // "All" shows the featured post on top and the rest below; a category shows every post in it.
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.bl-cat'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.bl-card'));
+  const featured = document.getElementById('bl-featured');
+
+  function apply(cat: string) {
+    const all = cat === 'All';
+    if (featured) featured.hidden = !all;
+    cards.forEach((c) => {
+      c.hidden = all ? c.dataset.featured === 'true' : c.dataset.cat !== cat;
+    });
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      apply(b.dataset.cat ?? 'All');
+    })
+  );
+</script>
+
+<style>
+  .bl-hero { padding: clamp(48px, 8vw, 80px) clamp(20px, 4vw, 32px) 0; text-align: center; }
+  .bl-hero__lead { margin: 24px auto 0; font-size: 17px; line-height: 1.6; color: var(--grey-text); }
+
+  .bl-cats-sec { padding: 44px clamp(20px, 4vw, 32px) 0; }
+  .bl-cats { max-width: 1180px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .bl-cat {
+    font-family: inherit; font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--border-blue-2); background: #fff; color: var(--navy);
+  }
+  .bl-cat[aria-pressed='true'] { background: var(--navy); color: var(--lime); border-color: var(--navy); }
+
+  .bl-featured-sec { padding: 40px clamp(20px, 4vw, 32px) 0; }
+  .bl-featured-sec[hidden] { display: none; }
+  .bl-featured {
+    max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    background: #fff; border: 1px solid var(--border-blue); border-radius: 14px; overflow: hidden; color: var(--ink);
+  }
+  .bl-featured:hover { border-color: var(--navy); color: var(--ink); }
+  .bl-featured__img {
+    min-height: 300px; display: flex; align-items: center; justify-content: center;
+    background: repeating-linear-gradient(135deg, #E9E9E2 0 12px, #DEDED6 12px 24px);
+  }
+  .bl-featured__body { padding: clamp(28px, 4vw, 48px); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+  .bl-featured__tags { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+  .bl-featured__badge { background: var(--lime); color: var(--navy); padding: 5px 9px; border-radius: 999px; }
+  .bl-featured__cat { color: var(--grey-light); }
+  .bl-featured__title { margin: 0; font-size: clamp(26px, 3.6vw, 38px); line-height: 1.1; letter-spacing: -.025em; font-weight: 800; text-wrap: balance; }
+  .bl-featured__excerpt { margin: 0; font-size: 16px; line-height: 1.6; color: var(--grey-text); }
+  .bl-featured__more { margin-top: 6px; font-size: 14px; font-weight: 800; color: var(--navy); }
+
+  .bl-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--grey-muted); }
+  .bl-meta__div { width: 1px; height: 11px; background: var(--border-blue-2); }
+
+  .bl-grid-sec { padding: 40px clamp(20px, 4vw, 32px) 0; }
+  .bl-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 24px; }
+  .bl-card {
+    display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border-blue);
+    border-radius: 12px; overflow: hidden; color: var(--ink);
+  }
+  .bl-card[hidden] { display: none; }
+  .bl-card:hover { border-color: var(--navy); color: var(--ink); }
+  .bl-card__img {
+    flex: none; width: 100%; aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
+    background: repeating-linear-gradient(135deg, #E9E9E2 0 10px, #DEDED6 10px 20px);
+  }
+  .bl-card__body { padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+  .bl-card__cat { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--navy); }
+  .bl-card__title { margin: 0; font-size: 20px; line-height: 1.2; letter-spacing: -.015em; font-weight: 700; text-wrap: balance; }
+  .bl-card__excerpt { margin: 0; font-size: 14px; line-height: 1.55; color: var(--grey-text); }
+  .bl-card__meta { margin-top: auto; padding-top: 8px; }
+
+  /* phones: compact horizontal cards, no excerpt */
+  @media (max-width: 600px) {
+    .bl-grid { gap: 12px; }
+    .bl-card { flex-direction: row; }
+    .bl-card__img { width: 112px; aspect-ratio: auto; }
+    .bl-card__body { padding: 14px 16px; gap: 6px; }
+    .bl-card__title { font-size: 16px; }
+    .bl-card__excerpt { display: none; }
+  }
+
+  .bl-banner-sec { padding: 64px clamp(20px, 4vw, 32px) 80px; }
+</style>

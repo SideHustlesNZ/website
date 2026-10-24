@@ -410,3 +410,109 @@ body[data-locked='true'] { overflow: hidden; }
 [id] { scroll-margin-top: 16px; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ==========================================================================
+   Footer legal links (Terms + Privacy)
+   ========================================================================== */
+.sh-foot__title { color: var(--ink); }
+.sh-foot__legal { display: flex; gap: 18px; flex-wrap: wrap; }
+
+/* ==========================================================================
+   Community block — "55,000 Kiwis, already here." (Home, Pricing, About)
+   ========================================================================== */
+.sh-community {
+  position: relative; overflow: hidden; text-align: center;
+  padding: clamp(64px, 11vw, 120px) clamp(20px, 4vw, 32px);
+}
+.sh-community__wide, .sh-community__narrow { position: absolute; inset: 0; pointer-events: none; }
+.sh-community__narrow { left: -18px; display: none; }
+.sh-community__spacer { display: none; height: 50px; }
+.sh-face {
+  position: absolute; border-radius: 50%; overflow: hidden; border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #E3E3DC;
+  background: repeating-linear-gradient(135deg, #E9E9E2 0 7px, #DEDED6 7px 14px);
+}
+.sh-face--sm { box-shadow: 0 0 0 1px var(--border-blue-2); background: #E9E9E2; }
+.sh-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sh-community__h2 { position: relative; }
+.sh-community__lead {
+  position: relative; margin: 24px auto 0; max-width: 52ch;
+  font-size: 17px; line-height: 1.6; color: var(--grey-text);
+}
+@media (max-width: 1000px) {
+  .sh-community__wide { display: none; }
+  .sh-community__narrow, .sh-community__spacer { display: block; }
+}
+
+/* ==========================================================================
+   Pricing shell — plan cards + "What's included" (Home, Pricing)
+   ========================================================================== */
+.sh-plans-shell {
+  max-width: 1180px; margin: 0 auto; display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  background: #fff; border: 1px solid var(--border-blue); border-radius: 28px; overflow: hidden; text-align: left;
+}
+.sh-plans { padding: clamp(20px, 3vw, 28px); display: flex; flex-direction: column; gap: 20px; max-width: 100%; }
+.sh-plan { border: 1px solid var(--border-blue); border-radius: 22px; background: #fff; padding: 26px; }
+.sh-plan--featured {
+  border-color: var(--navy); background: linear-gradient(180deg, #FBFFEA, #fff);
+  box-shadow: 0 14px 34px rgba(25, 25, 112, .1);
+}
+.sh-plan__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sh-plan__label { font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+.sh-plan__pill {
+  background: var(--navy); color: var(--lime); font-size: 11px; font-weight: 800;
+  border-radius: 999px; padding: 7px 13px; white-space: nowrap;
+}
+.sh-plan__tag { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--navy); }
+.sh-plan__tag--grey { color: var(--grey-muted); }
+.sh-plan__offer { display: flex; align-items: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.sh-plan__badge {
+  background: var(--lime); color: var(--navy); font-size: 10px; font-weight: 800; letter-spacing: .14em;
+  text-transform: uppercase; border-radius: 6px; padding: 6px 9px;
+}
+.sh-plan__was { font-size: 14px; color: var(--grey-muted); text-decoration: line-through; }
+.sh-plan__price { display: flex; align-items: flex-end; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.sh-plan__price--24 { margin-top: 24px; }
+.sh-plan__amount { font-size: clamp(48px, 12vw, 62px); line-height: .9; font-weight: 800; letter-spacing: -.04em; }
+.sh-plan__per { font-size: 14px; font-weight: 600; color: var(--grey-text); padding-bottom: 6px; }
+.sh-plan__fine { margin: 12px 0 0; font-size: 13px; color: var(--grey-light); }
+.sh-plan__cta {
+  display: flex; align-items: center; justify-content: center; margin-top: 24px;
+  border-radius: 999px; padding: 18px; font-size: 15px; font-weight: 700;
+}
+.sh-plan__cta--navy { background: var(--navy); color: var(--lime); }
+.sh-plan__cta--navy:hover { background: var(--navy-deep); color: var(--lime); }
+.sh-plan__cta--outline { background: #fff; border: 1px solid var(--navy); color: var(--navy); }
+.sh-plan__cta--outline:hover { background: var(--card-blue); color: var(--navy); }
+
+.sh-plans-inc { background: #fff; border-left: 1px solid var(--border-blue); padding: clamp(28px, 3.5vw, 34px) clamp(20px, 3.5vw, 38px); }
+@media (max-width: 860px) { .sh-plans-inc { border-left: none; border-top: 1px solid var(--border-blue); } }
+.sh-plans-inc__title { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--navy); }
+.sh-plans-inc__rows { display: flex; flex-direction: column; gap: 26px; margin-top: 26px; }
+.sh-plans-inc__note { margin: 30px 0 0; font-size: 12px; color: var(--grey-muted); }
+.sh-inc { display: flex; gap: 16px; align-items: flex-start; }
+.sh-inc__tile {
+  flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--tint-blue);
+  border: 1px solid var(--border-blue-2); color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+}
+.sh-inc__title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+.sh-inc__body { margin: 6px 0 0; font-size: 14px; line-height: 1.55; color: var(--grey-text); max-width: 52ch; }
+
+/* ==========================================================================
+   Navy CTA banner — Blog, Blog Post, Success Stories
+   ========================================================================== */
+.sh-banner {
+  max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
+  gap: 28px; flex-wrap: wrap; background: var(--navy); border-radius: 14px;
+  padding: 22px 20px 22px clamp(22px, 3vw, 32px);
+}
+.sh-banner__text { display: flex; flex-direction: column; gap: 5px; }
+.sh-banner__title { font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: #fff; }
+.sh-banner__sub { font-size: 13px; color: rgba(255, 255, 255, .75); }
+.sh-banner__cta {
+  display: inline-flex; align-items: center; gap: 12px; background: var(--lime); color: var(--navy);
+  padding: 13px 14px 13px 22px; border-radius: 999px; font-size: 14px; font-weight: 800;
+}
+.sh-banner__cta:hover { background: var(--lime-hover); color: var(--navy); }

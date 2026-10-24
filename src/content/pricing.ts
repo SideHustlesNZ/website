@@ -6,62 +6,12 @@
 */
 
 export const hero = {
-  h1: ['Join the ', 'crew.'],
+  h1: ['Get instant ', 'access.'],
   lead: 'One membership. Full access from day one.',
 };
 
-export const annual = {
-  label: 'Annual',
-  save: 'Save $576',
-  badge: 'Limited offer',
-  wasPrice: '$2,364/year',
-  price: '$149',
-  per: 'month*',
-  fine: 'Billed annually at $1,788, GST inclusive.',
-  cta: 'Join annual',
-};
-
-export const monthly = {
-  label: 'Monthly',
-  tag: 'Flexible',
-  price: '$197',
-  per: 'month',
-  fine: 'GST inclusive. No commitment, cancel anytime.',
-  cta: 'Start monthly',
-};
-
-export const includedTitle = "What's included";
-
-export const includedFootnote =
-  '*Annual offer price held for your first year, then renews at the standard annual rate.';
-
-export const included = [
-  {
-    icon: 'route',
-    title: 'The SHNZ Framework',
-    body: 'A step-by-step path from raw idea to first paid customer, broken into weekly actions you can finish in an evening. No theory modules, no busywork - just the next right thing to do.',
-  },
-  {
-    icon: 'record_voice_over',
-    title: 'Weekly live coaching',
-    body: "Every week you can bring your offer, your pricing or whatever has you stuck, and leave the call with a clear answer and a decision made. Recorded if you can't make it live.",
-  },
-  {
-    icon: 'folder_copy',
-    title: 'Template vault',
-    body: 'Pricing calculators, sales scripts, proposals, invoices and contracts - written for New Zealand, GST included and ready to send. Fill in your details and use them today.',
-  },
-  {
-    icon: 'rate_review',
-    title: 'Masterclasses',
-    body: 'Sit in with leading New Zealand business owners as they walk through exactly how they built it. Real numbers, real mistakes, and time at the end for your questions.',
-  },
-  {
-    icon: 'event',
-    title: 'Members-only events',
-    body: 'Monthly online sessions on one practical topic, plus in-person meetups in Auckland, Wellington and Christchurch where the conversation carries on after the talk finishes.',
-  },
-];
+/* Plan cards and the "What's included" list are shared with Home: see `plans` and
+   `membershipIncluded` in src/content/site.ts. */
 
 export const faqSection = {
   eyebrow: 'FAQs',
